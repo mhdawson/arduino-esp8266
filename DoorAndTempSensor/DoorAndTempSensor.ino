@@ -5,6 +5,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include "WirelessConfig.h"
+#include "ESP8266WiFiGeneric.h"
 
 #define TRANSMIT_INTERVAL_SECONDS 120
 
@@ -32,6 +33,7 @@ void callback(const MQTT::Publish& pub) {
 }
 
 WiFiClient wclient;
+ESP8266WiFiGenericClass wifi;
 PubSubClient client(wclient, server);
 
 int counter = 0;
@@ -45,6 +47,9 @@ void setup() {
   delay(10);
   Serial.println();
   Serial.println();
+
+  // turn of the Access Point as we are not using it
+  wifi.mode(WIFI_STA);
 
   client.set_callback(callback);
 
