@@ -18,8 +18,8 @@ IPAddress server(10, 1, 1, 186);
 #define OPEN_CLOSE_PIN D5
 #define NUM_CHARS_IN_MESSAGE 12
 
-#define CLOSED "1"
-#define OPEN "0"
+#define CLOSED "0"
+#define OPEN "1"
 
 #define MAX_TOPIC_LEN 128
 #define MIN_TEMP_INTERVAL 10
