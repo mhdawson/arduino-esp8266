@@ -4,8 +4,11 @@
 #include <PubSubClient.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include "WirelessConfig.h"
 #include "ESP8266WiFiGeneric.h"
+
+// device specifics
+#include "WirelessConfig.h"
+#include "GarageSensorConfig.h"
 
 #define TRANSMIT_INTERVAL_SECONDS 120
 
@@ -14,15 +17,13 @@ IPAddress server(10, 1, 1, 186);
 // 2272 codes used to signify open or closed door
 #define OPEN_CLOSE_PIN D5
 #define NUM_CHARS_IN_MESSAGE 12
-#define DEVICE_2272_ID "0101FFFF000"
+
 #define CLOSED "1"
 #define OPEN "0"
 
-// device id used in message transmitted for the
-// temp sensor
+#define MAX_TOPIC_LEN 128
 #define MIN_TEMP_INTERVAL 10
 #define MAX_TEMP_MESSAGE_SIZE 100
-#define DS18B20_SENSOR_ID 0x24
 #define DS18B20_PIN D4  // don't use D0 or D2 as can interfere with boot
 OneWire ds(DS18B20_PIN);
 DallasTemperature tempSensors(&ds);
@@ -96,7 +97,12 @@ void loop() {
     }
 
     // send out door state
-    client.publish("outTopic", message);
+    char doorTopic[MAX_TOPIC_LEN];
+    memset(doorTopic, 0, MAX_TOPIC_LEN);
+    strncat(doorTopic, DOOR_TOPIC, MAX_TOPIC_LEN);
+    strncat(doorTopic, "/", MAX_TOPIC_LEN);
+    strncat(doorTopic, message, MAX_TOPIC_LEN);
+    client.publish(doorTopic, message);
 
     // send out temperature
     if (counter > (MIN_TEMP_INTERVAL *10)) {
@@ -106,9 +112,9 @@ void loop() {
       char floatBuffer[10];
       tempSensors.requestTemperatures();
       float currentTemp = tempSensors.getTempCByIndex(0);
-      snprintf(tempMessage, MAX_TEMP_MESSAGE_SIZE, "0, 0 - temp %s",
+      snprintf(tempMessage, MAX_TEMP_MESSAGE_SIZE, "0, 0 - temp: %s",
                dtostrf(currentTemp, 4, 2, floatBuffer));
-      client.publish("outTopic", tempMessage);
+      client.publish(TEMP_TOPIC, tempMessage);
     }
 
     counter = 0;
