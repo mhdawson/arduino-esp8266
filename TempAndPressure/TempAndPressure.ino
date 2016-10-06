@@ -10,7 +10,8 @@
 
 #define TRANSMIT_INTERVAL_SECONDS 120
 
-IPAddress server(10, 1, 1, 186);
+IPAddress server(mqttServer[0], mqttServer[1],
+                 mqttServer[2], mqttServer[3]);
 
 Adafruit_BMP280 bmp; 
 SI7021 sensor;

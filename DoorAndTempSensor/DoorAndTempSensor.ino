@@ -12,7 +12,8 @@
 
 #define TRANSMIT_INTERVAL_SECONDS 120
 
-IPAddress server(10, 1, 1, 186);
+IPAddress server(mqttServer[0], mqttServer[1],
+                 mqttServer[2], mqttServer[3]);
 
 // 2272 codes used to signify open or closed door
 #define OPEN_CLOSE_PIN D5
