@@ -24,7 +24,7 @@ and configuration.
   * pass - the password for the wireless network
 
 
-* Device configuration from configuration for device (ex GarageDoorConfig.h):
+* Device configuration from configuration for device (ex ..\devices-config\GarageDoorConfig.h):
   * DEVICE_2272_ID - The 2272 code used for this sensor. If you have
     multiple sensors make this unique for each one.
   * DOOR_TOPIC - mqtt topic to most door open/close messages.
