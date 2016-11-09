@@ -32,7 +32,7 @@ and configuration.
 
 # Building
 
-To build you need to do the following:
+To build you need to add the following:
 
 * [OneWire](https://github.com/PaulStoffregen/OneWire) (must be recent version
   that supports esp8266).
@@ -40,10 +40,10 @@ To build you need to do the following:
 * [Arduino ESP library](https://github.com/esp8266/Arduino)
 * [PubSubClient](https://github.com/knolleary/pubsubclient)
 
-  libraries as libraries in your Arduino IDE
+libraries as libraries in your Arduino IDE
 
-Once these are installed you can then add your sendor configuration file and
-Wifi configuration file and the compile flash your esp8266.
+Once these are installed, you can then add your device and
+Wifi configuration files and the compile and flash your esp8266.
 
 # Schematic
 
@@ -57,7 +57,7 @@ used:
 The following are a few pictures of my build:
 
 ![picture1](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/esp-door-pict1.jpg)
-![picture1](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/esp-door-pict2.jpg)
+![picture2](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/esp-door-pict2.jpg)
 
 # Main Components
 
