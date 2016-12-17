@@ -9,6 +9,7 @@
 #include "MqttBridge.h"
 #include "Device2262n.h"
 #include "MeatThermometer1.h"
+#include "BluelineDevice.h"
 
 #define RX_433_PIN D4
 
@@ -20,6 +21,7 @@ ESP8266WiFiGenericClass wifi;
 PubSubClient client(wclient, server);
 MqttBridge bridge(&client, "esp/house/2262/200");
 MqttBridge meatBridge(&client, "esp/house/meat/temp");
+MqttBridge bluelineBridge(&client, "esp/house/blueline");
 
 RXCore433 receiver(RX_433_PIN);
 
@@ -35,6 +37,10 @@ void setup() {
   meatTherm1->registerMessageHandler(&meatBridge);
   receiver.registerDevice(meatTherm1);
 
+  BluelineDevice* blueline1 = new BluelineDevice(0x1efd);
+  blueline1->registerMessageHandler(&bluelineBridge);
+  receiver.registerDevice(blueline1);
+ 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
 }
