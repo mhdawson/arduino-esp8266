@@ -103,7 +103,7 @@ void BluelineDevice::decodeMessage(Message* message){
 #ifdef __arm__
     sprintf(message->text, "%ld, %x - temp: %f", message->timestamp, message->code, message->value);
 #else
-    char buffer[100];
+    char buffer[10];
     dtostrf(message->value, 6, 2, buffer);
     sprintf(message->text,"%ld, %x - temp: %s", message->timestamp, message->code, buffer);
 #endif
