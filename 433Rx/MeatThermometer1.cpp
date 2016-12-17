@@ -134,11 +134,11 @@ void MeatThermometer1::decodeMessage(Message* message){
 
   message->value = val;
   #ifdef __arm__
-  sprintf(message->text,"[%x] - %ld, temp: %f", device, message->timestamp, message->value
+  snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "[%x] - %ld, temp: %f", device, message->timestamp, message->value
   #else
   char buffer[100];
   dtostrf(message->value, 6, 2, buffer);
-  sprintf(message->text,"[%x] - %ld, temp: %s", device, message->timestamp, buffer);
+  snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "[%x] - %ld, temp: %s", device, message->timestamp, buffer);
   #endif
 };
 

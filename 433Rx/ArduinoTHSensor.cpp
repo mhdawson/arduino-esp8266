@@ -102,7 +102,7 @@ INTERRUPT_SAFE void ArduinoTHSensor::processPulse(long duration) {
 void ArduinoTHSensor::decodeMessage(Message* message) {
   char* bytes = (char*) &message->code;
   message->type = 1;
-  sprintf(message->text, "%ld, %x - temp: %d,humidity: %d",
+  snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "%ld, %x - temp: %d,humidity: %d",
   message->timestamp,
   message->code,
   (int) bytes[1] - 128,

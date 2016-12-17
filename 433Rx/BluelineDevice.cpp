@@ -106,18 +106,18 @@ void BluelineDevice::decodeMessage(Message* message){
 #else
     char buffer[10];
     dtostrf(message->value, 6, 2, buffer);
-    sprintf(message->text,"%ld, %x - temp: %s", message->timestamp, message->code, buffer);
+    snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "%ld, %x - temp: %s", message->timestamp, message->code, buffer);
 #endif
   } else if ((message->code & 0x00030000) == 0x00010000) {
     // current power use
     message->type = 2;
     message->value = ((float) 3600)/(((message->code & 0x0000FF00)) + ((message->code & 0x00FF0000)>>16) - houseCode);
 #ifdef __arm__
-    sprintf(message->text, "%ld, %x - power: %f", message->timestamp, message->code, message->value);
+    snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "%ld, %x - power: %f", message->timestamp, message->code, message->value);
 #else
     char buffer[100];
     dtostrf(message->value, 6, 2, buffer);
-    sprintf(message->text,"%ld, %x - power: %s", message->timestamp, message->code, buffer);
+    snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "%ld, %x - power: %s", message->timestamp, message->code, buffer);
 #endif
   } else {
     message->type = 4;
