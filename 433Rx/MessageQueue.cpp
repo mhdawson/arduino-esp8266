@@ -7,21 +7,21 @@
 #include "MessageQueue.h"
 
 MessageQueue::MessageQueue(void) {
-   // build the list of free messages
-   memset(messages, 0, MAX_MESSAGES * sizeof(Message));
-   for (int i=0; i < (MAX_MESSAGES - 1) ; i++) {
-      messages[i].next = &messages[i+1];
-   }
-   messages[MAX_MESSAGES-1].next = NULL;
-   freeMessages = &(messages[0]);
-   newMessages = NULL;  
+  // build the list of free messages
+  memset(messages, 0, MAX_MESSAGES * sizeof(Message));
+  for (int i=0; i < (MAX_MESSAGES - 1) ; i++) {
+    messages[i].next = &messages[i+1];
+  }
+  messages[MAX_MESSAGES-1].next = NULL;
+  freeMessages = &(messages[0]);
+  newMessages = NULL;
 }
 
 ICACHE_RAM_ATTR Message* MessageQueue::getFreeMessage(void) {
-  Message* newMessage = NULL; 
+  Message* newMessage = NULL;
   newMessage = freeMessages;
   if (NULL != newMessage) {
-    freeMessages = newMessage->next;  
+    freeMessages = newMessage->next;
   }
   return newMessage;
 };
@@ -48,4 +48,3 @@ void MessageQueue::returnMessages(Message* messages, Message* lastMessage) {
   freeMessages = messages;
   interrupts();
 };
-

@@ -8,14 +8,14 @@
 #include "Device.h"
 
 class RXCore433 {
-   public:
-      RXCore433(int interrupt);
-      void handleMessage();
-      bool registerDevice(Device* newDevice);
+  public:
+    RXCore433(int interrupt);
+    void handleMessage();
+    bool registerDevice(Device* newDevice);
 
-   private:
-      Message _lastHandledMessage;
-      ICACHE_RAM_ATTR static void handleInterrupt();
+  private:
+    Message _lastHandledMessage;
+    ICACHE_RAM_ATTR static void handleInterrupt();
 };
 
 #endif

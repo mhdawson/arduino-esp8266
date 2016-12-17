@@ -5,8 +5,8 @@
 #include "MqttBridge.h"
 
 MqttBridge::MqttBridge(PubSubClient* client, char* topic) {
-   _client = client;
-   _topic = topic;
+  _client = client;
+  _topic = topic;
 }
 
 void MqttBridge::handleMessage(Message* message) {

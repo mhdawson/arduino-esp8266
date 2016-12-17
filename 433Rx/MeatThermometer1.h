@@ -10,23 +10,23 @@
 #define BITS_IN_MESSAGE 32
 
 class MeatThermometer1  : public Device {
-   public:
-      MeatThermometer1();
+  public:
+    MeatThermometer1();
 
-      virtual int deviceType(void);
-      virtual char* deviceName(void);
+    virtual int deviceType(void);
+    virtual char* deviceName(void);
 
-      virtual void processPulse(long duration);
-      virtual void decodeMessage(Message* message);
-      virtual void publishTopic(Message* message, char* buffer, int maxLength);
+    virtual void processPulse(long duration);
+    virtual void decodeMessage(Message* message);
+    virtual void publishTopic(Message* message, char* buffer, int maxLength);
 
-   private:
-      bool syncFound;
-      unsigned int bitCount;
-      unsigned long code;
-      long currentBit;
-      long syncCount;
-      long shortCount;
+  private:
+    bool syncFound;
+    unsigned int bitCount;
+    unsigned long code;
+    long currentBit;
+    long syncCount;
+    long shortCount;
 };
 
 #endif

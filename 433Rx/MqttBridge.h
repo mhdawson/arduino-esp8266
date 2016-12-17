@@ -10,13 +10,13 @@
 #include <PubSubClient.h>
 
 class MqttBridge : public DeviceMessageHandler {
-   public:
-      MqttBridge(PubSubClient* client, char* topic);
-      virtual void handleMessage(Message* message);
+  public:
+    MqttBridge(PubSubClient* client, char* topic);
+    virtual void handleMessage(Message* message);
 
-   private:
-      PubSubClient* _client;
-      char* _topic;
+  private:
+    PubSubClient* _client;
+    char* _topic;
 };
 
 #endif

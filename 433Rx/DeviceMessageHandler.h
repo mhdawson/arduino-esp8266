@@ -8,12 +8,12 @@
 #include "Device.h"
 
 class DeviceMessageHandler {
-   public:
-      DeviceMessageHandler() {};
+  public:
+    DeviceMessageHandler() {};
 
-      virtual void handleMessage(Message* message)= 0;
+    virtual void handleMessage(Message* message)= 0;
 
-   private:
+  private:
 };
 
 #endif

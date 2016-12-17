@@ -90,7 +90,7 @@ ICACHE_RAM_ATTR void Device2262n::processPulse(long duration) {
           // enough times
           repeatCount = 0;
           memset(lastMessage, 0, TRISTATE_MESSAGE_LENGTH);
-         Message* newMessage = queue->getFreeMessage();
+          Message* newMessage = queue->getFreeMessage();
           if (NULL != newMessage) {
             memset(newMessage, 0, sizeof(Message));
             newMessage->device = (void*) this;
@@ -122,4 +122,3 @@ ICACHE_RAM_ATTR void Device2262n::processPulse(long duration) {
 void Device2262n::decodeMessage(Message* message) {
   // message is already in the right format
 };
-
