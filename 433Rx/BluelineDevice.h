@@ -5,13 +5,13 @@
 #ifndef _BLUELINE_DEVICE
 #define _BLUELINE_DEVICE
 
-#include "Device.h"
+#include "MqttDevice.h"
 
 #define BITS_IN_MESSAGE 32
 
-class BluelineDevice : public Device {
+class BluelineDevice : public MqttDevice {
   public:
-    BluelineDevice(long houseCode);
+    BluelineDevice(long houseCode, PubSubClient* client, char* topic);
 
     virtual int deviceType(void);
     virtual char* deviceName(void);

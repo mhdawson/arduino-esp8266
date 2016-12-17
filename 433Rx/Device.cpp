@@ -27,11 +27,6 @@ void Device::getMessageText(int messageNum, Message* message, char* buffer, int 
 }
 
 
-void Device::publishTopic(int messageNum, Message* message, char* buffer, int maxLength) {
-  publishTopic(message, buffer, maxLength);
-}
-
-
 bool Device::registerMessageHandler(DeviceMessageHandler* handler) {
   MessageHandlerListEntry* handlerEntry = (MessageHandlerListEntry*) malloc(sizeof(MessageHandlerListEntry));
   if (NULL != handlerEntry) {
@@ -51,9 +46,5 @@ void Device::handleMessage(Message* message) {
     nextHandler->handler->handleMessage(message);
     nextHandler = nextHandler->next;
   }
-}
-
-
-void Device::publishTopic(Message* message, char* buffer, int maxLength) {
 }
 

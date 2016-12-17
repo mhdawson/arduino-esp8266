@@ -5,7 +5,7 @@
 #ifndef _DEVICE_MESSAGE_HANDLER
 #define _DEVICE_MESSAGE_HANDLER
 
-#include "Device.h"
+#include "MessageQueue.h"
 
 class DeviceMessageHandler {
   public:

@@ -44,12 +44,10 @@ class Device {
     // can be overriden if the device has more than one message
     virtual int numMessages(void);
     virtual void getMessageText(int messageNum, Message* message, char* buffer, int maxLength);
-    virtual void publishTopic(int messageNum, Message* message, char* buffer, int maxLength);
 
     // can optionally be overridden by devices
     virtual void handleMessage(Message* message);
     virtual bool registerMessageHandler(DeviceMessageHandler* handler);
-    virtual void publishTopic(Message* message, char* buffer, int maxLength);
 };
 
 #endif

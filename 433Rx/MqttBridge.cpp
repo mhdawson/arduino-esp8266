@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #include "MqttBridge.h"
-#include "Device.h"
+#include "MqttDevice.h"
 
 #define MAX_TOPIC_LENGTH 1024
 #define MAX_MESSAGE_LENGTH 256
@@ -23,7 +23,7 @@ void MqttBridge::handleMessage(Message* message) {
     topicBuffer[0] = 0;
     messageBuffer[0] = 0;
     strncpy(topicBuffer, _topic, MAX_TOPIC_LENGTH);
-    messageDevice->publishTopic(i, message, topicBuffer, MAX_TOPIC_LENGTH); 
+    ((MqttDevice*) messageDevice)->publishTopic(i, message, topicBuffer, MAX_TOPIC_LENGTH); 
     messageDevice->getMessageText(i, message, messageBuffer, MAX_MESSAGE_LENGTH); 
     if (strlen(topicBuffer) != 0) {
       _client->publish(topicBuffer, messageBuffer);

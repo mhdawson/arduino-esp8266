@@ -15,7 +15,7 @@
 #define ONE_PULSE_MAX_LENGTH 1200
 #define MIN_PULSE_LENGTH 200
 
-BluelineDevice::BluelineDevice(long houseCode) : Device() {
+BluelineDevice::BluelineDevice(long houseCode, PubSubClient* client, char* topic) : MqttDevice(client, topic) {
   syncFound = false;
   bitCount = 0;
   code = 0;

@@ -20,8 +20,6 @@ WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
 PubSubClient client(wclient, server);
 MqttBridge bridge(&client, "esp/house/2262/200");
-MqttBridge meatBridge(&client, "esp/house/meat/temp");
-MqttBridge bluelineBridge(&client, "esp/house/blueline");
 
 RXCore433 receiver(RX_433_PIN);
 
@@ -33,13 +31,8 @@ void setup() {
   device2262->registerMessageHandler(&bridge);
   receiver.registerDevice(device2262);
 
-  MeatThermometer1* meatTherm1 = new MeatThermometer1();
-  meatTherm1->registerMessageHandler(&meatBridge);
-  receiver.registerDevice(meatTherm1);
-
-  BluelineDevice* blueline1 = new BluelineDevice(0x1efd);
-  blueline1->registerMessageHandler(&bluelineBridge);
-  receiver.registerDevice(blueline1);
+  receiver.registerDevice(new MeatThermometer1(&client, "esp/house/meat/temp"));
+  receiver.registerDevice(new BluelineDevice(0x1efd, &client, "esp/house/blueline"));
  
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);

@@ -5,7 +5,7 @@
 #ifndef _MQTTBRIDGE_DEVICE
 #define _MQTTBRIDGE_DEVICE
 
-#include "Device2262n.h"
+#include "DeviceMessageHandler.h"
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
