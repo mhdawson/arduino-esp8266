@@ -18,7 +18,6 @@ class MeatThermometer1  : public Device {
 
     virtual void processPulse(long duration);
     virtual void decodeMessage(Message* message);
-    virtual void publishTopic(Message* message, char* buffer, int maxLength);
 
   private:
     bool syncFound;

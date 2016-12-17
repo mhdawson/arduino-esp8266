@@ -122,3 +122,5 @@ ICACHE_RAM_ATTR void Device2262n::processPulse(long duration) {
 void Device2262n::decodeMessage(Message* message) {
   // message is already in the right format
 };
+
+

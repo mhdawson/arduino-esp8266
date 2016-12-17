@@ -24,6 +24,7 @@ BluelineDevice::BluelineDevice(long houseCode) : Device() {
   pulseCount = 0;
 }
 
+
 int BluelineDevice::deviceType(void) {
   return DEVICE_ID;
 };
@@ -31,6 +32,7 @@ int BluelineDevice::deviceType(void) {
 char* BluelineDevice::deviceName(void) {
   return (char*) DEVICE_NAME;
 };
+
 
 INTERRUPT_SAFE void BluelineDevice::processPulse(long duration) {
   // any pulse less than MIN_PULSE_LENGTH means we have noise so we are not in the middle
@@ -91,6 +93,7 @@ INTERRUPT_SAFE void BluelineDevice::processPulse(long duration) {
   }
 };
 
+
 void BluelineDevice::decodeMessage(Message* message){
   if ((message->code & 0x00030000) == 0x00020000) {
     // current temperature
@@ -123,9 +126,10 @@ void BluelineDevice::decodeMessage(Message* message){
 
 
 void BluelineDevice::publishTopic(Message* message, char* buffer, int maxLength) {
+  strncat(buffer, (char*) TOPIC_SEPARATOR, maxLength);
   if (1 == message->type ) {
-    strncpy(buffer, (char*) "house/blueline/temp", maxLength);
+    strncat(buffer, (char*) "temp", maxLength);
   } else if (2 == message->type) {
-    strncpy(buffer, (char*) "house/blueline/power", maxLength);
+    strncat(buffer, (char*) "power", maxLength);
   }
 };

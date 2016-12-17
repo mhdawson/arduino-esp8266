@@ -142,6 +142,3 @@ void MeatThermometer1::decodeMessage(Message* message){
 };
 
 
-void MeatThermometer1::publishTopic(Message* message, char* buffer, int maxLength) {
-  strncpy(buffer, (char*) "house/meat/temp", maxLength);
-}
