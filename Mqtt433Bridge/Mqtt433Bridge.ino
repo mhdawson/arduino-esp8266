@@ -5,9 +5,10 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include "WirelessConfig.h"
-#include "Device2262n.h"
-#include "MqttBridge.h"
 #include "RXCore433.h"
+#include "MqttBridge.h"
+#include "Device2262n.h"
+#include "MeatThermometer1.h"
 
 #define RX_433_PIN D4
 
@@ -17,7 +18,8 @@ IPAddress server(mqttServer[0], mqttServer[1],
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
 PubSubClient client(wclient, server);
-MqttBridge bridge(&client, "house/esp");
+MqttBridge bridge(&client, "esp/house/2262/200");
+MqttBridge meatBridge(&client, "esp/house/meat/temp");
 
 RXCore433 receiver(RX_433_PIN);
 
@@ -28,6 +30,10 @@ void setup() {
   Device2262n* device2262 = new Device2262n(200,50,4);
   device2262->registerMessageHandler(&bridge);
   receiver.registerDevice(device2262);
+
+  MeatThermometer1* meatTherm1 = new MeatThermometer1();
+  meatTherm1->registerMessageHandler(&meatBridge);
+  receiver.registerDevice(meatTherm1);
 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
