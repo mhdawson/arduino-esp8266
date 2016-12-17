@@ -40,24 +40,23 @@ void RXCore433::handleMessage() {
       messageDevice->decodeMessage(nextMessage);
 
       // check if this is a duplicate message, only handle if not a duplicate
-      if (  nextMessage->timestamp > (_lastHandledMessage.timestamp + 1)
-      ||_lastHandledMessage.value != nextMessage->value
-      ||_lastHandledMessage.device != nextMessage->device
-      ||_lastHandledMessage.code != nextMessage->code
-      ||_lastHandledMessage.type != nextMessage->type
-    ) {
+      if (nextMessage->timestamp > (_lastHandledMessage.timestamp + 1) ||
+          _lastHandledMessage.value != nextMessage->value ||
+          _lastHandledMessage.device != nextMessage->device ||
+          _lastHandledMessage.code != nextMessage->code ||
+          _lastHandledMessage.type != nextMessage->type
+      ) {
+        // now ask the device to handle the message
+        messageDevice->handleMessage(nextMessage);
 
-      // now ask the device to handle the message
-      messageDevice->handleMessage(nextMessage);
-
-      // set this message as the last message handled
-      memcpy(&_lastHandledMessage, nextMessage, sizeof(Message));
+        // set this message as the last message handled
+        memcpy(&_lastHandledMessage, nextMessage, sizeof(Message));
+      }
+      lastMessage = nextMessage;
+      nextMessage = nextMessage->next;
     }
-    lastMessage = nextMessage;
-    nextMessage = nextMessage->next;
+    queue->returnMessages(currentMessages, lastMessage);
   }
-  queue->returnMessages(currentMessages, lastMessage);
-}
 }
 
 ICACHE_RAM_ATTR void RXCore433::handleInterrupt() {
