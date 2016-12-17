@@ -11,7 +11,7 @@ class DeviceMessageHandler {
   public:
     DeviceMessageHandler() {};
 
-    virtual void handleMessage(Message* message)= 0;
+    virtual void handleNextMessage(Message* message)= 0;
 
   private:
 };

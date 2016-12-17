@@ -5,11 +5,12 @@
 #ifndef _ARDUINO_TH_SENSOR_DEVICE
 #define _ARDUINO_TH_SENSOR_DEVICE
 
+#include "Device.h"
 #include "MqttDevice.h"
 
 #define BITS_IN_MESSAGE 32
 
-class ArduinoTHSensor : public MqttDevice {
+class ArduinoTHSensor : public Device, public MqttDevice {
   public:
     ArduinoTHSensor(PubSubClient* client, char* topic);
 

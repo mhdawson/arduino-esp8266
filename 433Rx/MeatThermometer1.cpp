@@ -17,13 +17,14 @@
 #define SYNC_DURATION_MAX 4500
 #define EXPECTED_MESSAGE_BITS 32
 
-MeatThermometer1::MeatThermometer1(PubSubClient* client, char* topic) : MqttDevice(client, topic) {
+MeatThermometer1::MeatThermometer1(PubSubClient* client, char* topic) : Device(), MqttDevice(client, topic) {
   syncFound = false;
   bitCount = 0;
   code = 0;
   currentBit = 0;
   syncCount = 0;
   shortCount = 0;
+  this->registerMessageHandler(this);
 }
 
 int MeatThermometer1::deviceType(void) {

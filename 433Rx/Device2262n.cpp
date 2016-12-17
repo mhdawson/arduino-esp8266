@@ -42,7 +42,7 @@ int Device2262n::deviceType(void) {
 };
 
 
-ICACHE_RAM_ATTR void Device2262n::processPulse(long duration) {
+INTERRUPT_SAFE void Device2262n::processPulse(long duration) {
   // any pulse less than MIN_PULSE_LENGTH means we have noise so we are not in the middle
   // of a transmision
   if (duration < MIN_PULSE_LENGTH) {

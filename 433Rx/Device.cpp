@@ -43,7 +43,7 @@ void Device::handleMessage(Message* message) {
   // let each registerd handler have a shot at handling the message
   MessageHandlerListEntry* nextHandler = _messageHandlers;
   while(NULL != nextHandler) {
-    nextHandler->handler->handleMessage(message);
+    nextHandler->handler->handleNextMessage(message);
     nextHandler = nextHandler->next;
   }
 }

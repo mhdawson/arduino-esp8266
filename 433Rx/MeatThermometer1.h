@@ -5,11 +5,12 @@
 #ifndef _MEAT_THERMOMETER1_DEVICE
 #define _MEAT_THERMOMETER1_DEVICE
 
+#include "Device.h"
 #include "MqttDevice.h"
 
 #define BITS_IN_MESSAGE 32
 
-class MeatThermometer1  : public MqttDevice {
+class MeatThermometer1  : public Device, public MqttDevice {
   public:
     MeatThermometer1(PubSubClient* client, char* topic);
 

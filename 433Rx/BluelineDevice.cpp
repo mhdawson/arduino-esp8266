@@ -15,13 +15,14 @@
 #define ONE_PULSE_MAX_LENGTH 1200
 #define MIN_PULSE_LENGTH 200
 
-BluelineDevice::BluelineDevice(long houseCode, PubSubClient* client, char* topic) : MqttDevice(client, topic) {
+BluelineDevice::BluelineDevice(long houseCode, PubSubClient* client, char* topic) : Device(), MqttDevice(client, topic) {
   syncFound = false;
   bitCount = 0;
   code = 0;
   this->houseCode = houseCode;
   memset(durations,0,sizeof(int)*BITS_IN_MESSAGE);
   pulseCount = 0;
+  this->registerMessageHandler(this);
 }
 
 

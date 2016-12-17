@@ -17,7 +17,7 @@
 #define EXPECTED_MESSAGE_BITS 32
 #define ONE_PULSE_MIN_LENGTH 450
 
-ArduinoTHSensor::ArduinoTHSensor(PubSubClient* client, char* topic) : MqttDevice(client, topic) {
+ArduinoTHSensor::ArduinoTHSensor(PubSubClient* client, char* topic) : Device(), MqttDevice(client, topic) {
   syncCount = 0;
   syncFound = false;
   bitCount = 0;
@@ -25,6 +25,7 @@ ArduinoTHSensor::ArduinoTHSensor(PubSubClient* client, char* topic) : MqttDevice
   this->houseCode = houseCode;
   memset(durations,0,sizeof(int)*BITS_IN_MESSAGE);
   pulseCount = 0;
+  this->registerMessageHandler(this);
 }
 
 int ArduinoTHSensor::deviceType(void) {
@@ -118,7 +119,7 @@ void ArduinoTHSensor::publishTopic(int messageNum, Message* message, char* buffe
   if (messageNum == 0) {
     snprintf(tempBuffer, 20, "/%x/temp", bytes[3]);
   } else {
-    snprintf(tempBuffer, maxLength, "/%x/humidity", bytes[3]);
+    snprintf(tempBuffer, 20, "/%x/humidity", bytes[3]);
   }
   strncat(buffer, tempBuffer, maxLength);
 }
@@ -142,7 +143,7 @@ void ArduinoTHSensor::getMessageText(int messageNum, Message* message, char* buf
 // including the checksum
 // then add the 3 message bytes together and add 0x77 to get the
 // expected checksum which is in byte 0
-bool ArduinoTHSensor::validateChecksum(int code) {
+INTERRUPT_SAFE bool ArduinoTHSensor::validateChecksum(int code) {
   char* bytes = (char*) & code;
   char calcChecksum = 0x77;
   char checksum = ((bytes[0] >> 4) & 0x0F) + ((bytes[0] & 0x0F) << 4);

@@ -6,8 +6,7 @@
 #include <PubSubClient.h>
 #include "WirelessConfig.h"
 #include "RXCore433.h"
-#include "MqttBridge.h"
-#include "Device2262n.h"
+#include "MqttDevice2262n.h"
 #include "MeatThermometer1.h"
 #include "BluelineDevice.h"
 #include "ArduinoTHSensor.h"
@@ -20,7 +19,6 @@ IPAddress server(mqttServer[0], mqttServer[1],
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
 PubSubClient client(wclient, server);
-MqttBridge bridge(&client, "esp/house/2262/200");
 
 RXCore433 receiver(RX_433_PIN);
 
@@ -28,10 +26,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Started\n");
 
-  Device2262n* device2262 = new Device2262n(200,50,4);
-  device2262->registerMessageHandler(&bridge);
-  receiver.registerDevice(device2262);
-
+  receiver.registerDevice(new MqttDevice2262n(200, 50, 4, &client, "esp/house/2262/200"));
   receiver.registerDevice(new MeatThermometer1(&client, "esp/house/meat/temp"));
   receiver.registerDevice(new BluelineDevice(0x1efd, &client, "esp/house/blueline"));
   receiver.registerDevice(new ArduinoTHSensor(&client, "esp/house/arduinoTHSensor"));

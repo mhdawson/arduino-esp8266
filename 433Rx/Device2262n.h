@@ -6,7 +6,6 @@
 #define _DEVICE2262N_DEVICE
 
 #include "Device.h"
-#include "DeviceMessageHandler.h"
 
 #define BITS_IN_MESSAGE_2262 24
 #define TRISTATE_MESSAGE_LENGTH 12
