@@ -8,7 +8,7 @@
 // note that on the arduino we have to be careful of how much memory we
 // use so the depth of the message queue needs to be kept small
 #define MAX_MESSAGES 8
-#define MAX_MESSAGE_TEXT_LENGTH 32
+#define MAX_MESSAGE_TEXT_LENGTH 64
 
 typedef struct Message {
   void* device;
