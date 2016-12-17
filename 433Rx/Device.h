@@ -8,6 +8,13 @@
 #include "MessageQueue.h"
 #include "DeviceMessageHandler.h"
 
+#ifdef __arm__
+
+#define INTERRUPT_SAFE
+#else
+#include <Arduino.h>
+#define INTERRUPT_SAFE ICACHE_RAM_ATTR
+#endif
 
 typedef struct MessageHandlerListEntry {
   DeviceMessageHandler* handler;
