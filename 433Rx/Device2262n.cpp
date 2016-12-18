@@ -94,7 +94,7 @@ INTERRUPT_SAFE void Device2262n::processPulse(long duration) {
           if (NULL != newMessage) {
             memset(newMessage, 0, sizeof(Message));
             newMessage->device = (void*) this;
-            newMessage->timestamp = millis() / 1000;
+            newMessage->timestamp = Device::getTime();
             strncpy(newMessage->text, (const char*) tristateCode, TRISTATE_MESSAGE_LENGTH);
             newMessage->code = 0;
             queue->enqueueMessage(newMessage);

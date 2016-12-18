@@ -84,7 +84,7 @@ INTERRUPT_SAFE void Device1527::processPulse(long duration) {
                if (NULL != newMessage) {
 	          memset(newMessage, 0, sizeof(Message));
                   newMessage->device = (void*) this;
-                  newMessage->timestamp = time(NULL); 
+                  newMessage->timestamp = Device::getTime(); 
                   strncpy(newMessage->text, (const char*) receivedCode, sizeof(receivedCode));
                   newMessage->code = 0;
                   queue->enqueueMessage(newMessage);

@@ -38,7 +38,7 @@ void setup() {
 }
 
 void loop() {
-  delay(1000);
+  delay(2000);
 
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Connecting to ");

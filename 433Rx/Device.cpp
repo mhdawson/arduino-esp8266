@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
+long time_counter = 0;
+
 Device::Device() {
   _messageHandlers = NULL;
 }
@@ -48,3 +50,6 @@ void Device::handleMessage(Message* message) {
   }
 }
 
+long Device::getTime() { 
+  return millis() / 1000; 
+}

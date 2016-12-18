@@ -48,6 +48,9 @@ class Device {
     // can optionally be overridden by devices
     virtual void handleMessage(Message* message);
     virtual bool registerMessageHandler(DeviceMessageHandler* handler);
+
+    // we need to manage time ourselves since the arduino does not have a clock
+    static long getTime();
 };
 
 #endif

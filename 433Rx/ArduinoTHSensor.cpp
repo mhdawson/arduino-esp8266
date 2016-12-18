@@ -72,7 +72,7 @@ INTERRUPT_SAFE void ArduinoTHSensor::processPulse(long duration) {
         if (NULL != newMessage) {
           memset(newMessage, 0, sizeof(Message));
           newMessage->device = (void*) this;
-          newMessage->timestamp = time(NULL);
+          newMessage->timestamp = Device::getTime();
           newMessage->code = code;
           queue->enqueueMessage(newMessage);
         } else {
