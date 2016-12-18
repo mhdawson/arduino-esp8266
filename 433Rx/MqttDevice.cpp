@@ -27,7 +27,7 @@ void MqttDevice::handleNextMessage(Message* message) {
     topicBuffer[0] = 0;
     messageBuffer[0] = 0;
     strncpy(topicBuffer, _topic, MAX_TOPIC_LENGTH);
-    ((MqttDevice*) message->device)->publishTopic(i, message, topicBuffer, MAX_TOPIC_LENGTH); 
+    publishTopic(i, message, topicBuffer, MAX_TOPIC_LENGTH);
     messageDevice->getMessageText(i, message, messageBuffer, MAX_MESSAGE_LENGTH); 
     if (strlen(topicBuffer) != 0) {
       _client->publish(topicBuffer, messageBuffer);
