@@ -11,6 +11,7 @@
 #include "BluelineDevice.h"
 #include "ArduinoTHSensor.h"
 #include "Device1527.h"
+#include "LacrossTX141.h"
 
 #define RX_433_PIN D4
 
@@ -32,6 +33,7 @@ void setup() {
   receiver.registerDevice(new BluelineDevice(0x1efd, &client, "esp/house/blueline"));
   receiver.registerDevice(new ArduinoTHSensor(&client, "esp/house/arduinoTHSensor"));
   receiver.registerDevice(new Device1527(350, 50, 4, &client, "esp/house/1527/350"));
+  receiver.registerDevice(new LacrossTX141(&client, "esp/house/lacrossTX141"));
 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
