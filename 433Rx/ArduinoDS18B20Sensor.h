@@ -22,7 +22,6 @@ class ArduinoDS18B20Sensor : public Device, public MqttDevice {
     virtual int numMessages(void);
     virtual void getMessageText(int messageNum, Message* message,
                                 char* buffer, int maxLength);
-    virtual void publishTopic(Message* message, char* buffer, int maxLength);
     virtual void publishTopic(int messageNum, Message* message,
                               char* buffer, int maxLength);
 
