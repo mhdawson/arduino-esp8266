@@ -6,6 +6,7 @@
 #include <PubSubClient.h>
 #include "WirelessConfig.h"
 #include "RXCore433.h"
+
 #include "MqttDevice2262n.h"
 #include "MeatThermometer1.h"
 #include "BluelineDevice.h"
@@ -13,7 +14,9 @@
 #include "Device1527.h"
 #include "LacrossTX141.h"
 #include "ArduinoLightSensor.h"
-#include "ArduinoDS18B20Sensor.h"
+#include "Device2262.h"
+//#include "ArduinoDS18B20Sensor.h"
+//#include "ArduinoTHSensor2.h"
 
 #define RX_433_PIN D4
 
@@ -30,14 +33,20 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Started\n");
 
-  receiver.registerDevice(new MqttDevice2262n(200, 50, 4, &client, "esp/house/2262/200"));
+  // note you can only use a subset of the devices at the same time.  This
+  // is because the interrupt handlers need to be in ram and only so many of 
+  // them can fit at the same time.
+  receiver.registerDevice(new MqttDevice2262n(200, 75, 2, &client, "esp/house/2262/200"));
+  receiver.registerDevice(new MqttDevice2262n(350, 50, 4, &client, "esp/house/2262/200"));
+  receiver.registerDevice(new Device2262(&client, "esp/house/2262"));
   receiver.registerDevice(new MeatThermometer1(&client, "esp/house/meat/temp"));
   receiver.registerDevice(new BluelineDevice(0x1efd, &client, "esp/house/blueline"));
   receiver.registerDevice(new ArduinoTHSensor(&client, "esp/house/arduinoTHSensor"));
   receiver.registerDevice(new Device1527(350, 50, 4, &client, "esp/house/1527/350"));
   receiver.registerDevice(new LacrossTX141(&client, "esp/house/lacrossTX141"));
   receiver.registerDevice(new ArduinoLightSensor(&client, "esp/house/arduinoLightSensor"));
-  receiver.registerDevice(new ArduinoDS18B20Sensor(&client, "esp/house/arduinoDS18B20Sensor"));
+ // receiver.registerDevice(new ArduinoDS18B20Sensor(&client, "esp/house/arduinoDS18B20Sensor"));
+ // receiver.registerDevice(new ArduinoTHSensor2(&client, "esp/house/arduinoTHSensor"));
 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
