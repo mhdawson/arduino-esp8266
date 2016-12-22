@@ -21,7 +21,8 @@ and configuration.
 
 * Wifi configuration, from WirelessConfig.h:
   * ssid - The id of the wireless network to connect to.
-  * pass - the password for the wireless network
+  * pass - the password for the wireless network.
+  * mqttServer - the mqtt server to which to connect to.
 
 
 * Device configuration from configuration for device (ex ..\devices-config\GarageDoorConfig.h):
