@@ -2,11 +2,11 @@
 
 This device provides an interface for controlling Hampton Bay
 ceiling fans.  Since I could not find a transitter/receiver
-at the right freqency, its built from an purchased remote
+at the right freqency, it is built from a purchased remote
 with the esp "pushing" the buttons on the remote by using
-transistors to drive the buttons high or low.
-
-
+transistors to drive the buttons high or low.  The same is true for the device
+select (0000 to 1111).  The esp can select the device by driving the
+transistors connected to the select lines.
 
 # Configuration
 
@@ -19,7 +19,6 @@ and configuration:
     where XXXX is one of 0000 through 1111 to correspond to
     the code selected for the fan, and command is one of
     high, med, low or off.
-
 * Wifi configuration, from WirelessConfig.h:
   * ssid - The id of the wireless network to connect to.
   * pass - the password for the wireless network.
