@@ -6,6 +6,8 @@ at the right freqency, its built from an purchased remote
 with the esp "pushing" the buttons on the remote by using
 transistors to drive the buttons high or low.
 
+
+
 # Configuration
 
 The following constants can be adjusted to fit your build
@@ -55,4 +57,5 @@ The following are a few pictures of my build:
 # Main Components
 
 * [NodeMCU D1](http://www.ebay.com/itm/NodeMCU-Lua-ESP-12-WeMos-D1-Mini-WIFI-4M-Bytes-Development-Board-Module-ESP8266-/321989574625)
-* [Remote Control]()
+* [Remote Control](http://www.ebay.com/itm/232182237267?_trksid=p2060353.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)  ~10 US on eBay.:
+  ![remote control](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fanremote.jpg)
