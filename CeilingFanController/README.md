@@ -14,7 +14,7 @@ and configuration:
 * Basic as part of ino file:
   * FAN_TOPIC - the topic on which the device listens
     for messages.  Messages are in the form of XXXX,command
-    where XXXX is one of 0000 through 1111 to correspond to 
+    where XXXX is one of 0000 through 1111 to correspond to
     the code selected for the fan, and command is one of
     high, med, low or off.
 
@@ -47,8 +47,10 @@ used:
 
 The following are a few pictures of my build:
 
-![picture1]()
-![picture2]()
+![picture1](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fancontroller1.jpg)
+![picture2](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fancontroller2.jpg)
+![picture3](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fancontroller3.jpg)
+![picture4](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fancontroller4.jpg)
 
 # Main Components
 
