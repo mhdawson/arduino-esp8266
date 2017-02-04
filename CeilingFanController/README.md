@@ -47,7 +47,7 @@ used:
 
 # Pictures
 
-The following are a few pictures of my build:
+The following are a few pictures of my build.  The first shows the esp8266 circuit I built to control the buttons on the original remote.  The second that circuit wired into the original remote control (buttons and device select).  The last 2 shows the final packaging.
 
 ![picture1](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fancontroller1.jpg)
 ![picture2](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fancontroller2.jpg)
