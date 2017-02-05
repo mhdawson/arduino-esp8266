@@ -1,12 +1,25 @@
 # CeilingFanController
 
 This device provides an interface for controlling Hampton Bay
-ceiling fans.  Since I could not find a transitter/receiver
+ceiling fans through mqtt.  Since I could not find a transitter/receiver
 at the right freqency, it is built from a purchased remote
 with the esp "pushing" the buttons on the remote by using
 transistors to drive the buttons high or low.  The same is true for the device
 select (0000 to 1111).  The esp can select the device by driving the
 transistors connected to the select lines.
+
+You can then control the ceiling fans by voice, remote on your phone or
+scheduler When used with projects like:
+
+* [AlexaMqttBridge](https://github.com/mhdawson/AlexaMqttBridge)
+* [micro-app-remote-control](https://github.com/mhdawson/micro-app-remote-control)
+* [micro-app-schedule-controller](https://github.com/mhdawson/micro-app-schedule-controller)
+
+My favorite is:
+
+```
+"Alexa ask michael to turn on fan hi"
+```
 
 # Configuration
 
@@ -39,10 +52,15 @@ Wifi configuration files and the compile and flash your esp8266.
 
 # Schematic
 
-The following is the schematic for the sensor hardware that I
-used:
+The following is the schematic for the sensor hardware that I used:
 
-![schematic]()
+![schematic](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/fan-circuit.png)
+
+The jumper is to allow the nodeMCU to be powered from the 12v supply when the
+USB connection is NOT in place.  You should not have the jumper closed and the
+USB connected at the same time.  You can have the 12v supply connected and the
+USB connection when the jumper is not in place so that you can update/test the
+controller.
 
 # Pictures
 
