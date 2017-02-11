@@ -20,6 +20,7 @@ boolean messageWaiting;
 boolean ledOn;
 
 void callback(const MQTT::Publish& pub) {
+  Serial.println("publish");
   if(0 == strcmp(pub.payload_string().c_str(), "1")) {
     messageWaiting = true;
   } else {
@@ -42,6 +43,7 @@ void setup() {
   client.set_callback(callback);
 }
 
+int count = 0;
 
 void loop() {
   client.loop();
@@ -64,14 +66,16 @@ void loop() {
     }
   }
 
-  if ((true == messageWaiting) && (false == ledOn)) {
-    digitalWrite(LED_PIN, HIGH);
-    ledOn = true;
-  } else {
-    digitalWrite(LED_PIN, LOW);
-    ledOn = false;
+  count++;
+  if (count >= 50 ) {
+    count = 0;
+    if ((true == messageWaiting) && (false == ledOn)) {
+      digitalWrite(LED_PIN, HIGH);
+      ledOn = true;
+    } else {
+      digitalWrite(LED_PIN, LOW);
+      ledOn = false;
+    }
   }
-                 
-  delay(BLINK_INTERVAL_SECONDS * 1000);
-
+  delay(BLINK_INTERVAL_SECONDS * 1000/50);
 }
