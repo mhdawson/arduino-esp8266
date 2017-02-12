@@ -61,7 +61,7 @@ void loop() {
   }
 
   if (!client.connected()) {
-    if (client.connect("sensclient")) {
+    if (client.connect("mwiclient")) {
       client.subscribe(MESSAGE_WAITING_TOPIC);
     }
   }
