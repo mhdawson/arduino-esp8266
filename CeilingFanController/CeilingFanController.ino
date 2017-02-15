@@ -104,7 +104,6 @@ void loop() {
 
   if (!client.connected()) {
     if (client.connect("sensclient")) {
-
        client.subscribe(FAN_TOPIC);
     }
   }
