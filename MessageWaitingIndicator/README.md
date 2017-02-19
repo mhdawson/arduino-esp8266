@@ -20,7 +20,8 @@ and configuration:
 * Wifi configuration, from WirelessConfig.h:
   * ssid - The id of the wireless network to connect to.
   * pass - the password for the wireless network.
-  * mqttServer - array with the IPV4 components for the mqtt
+  * mqttServerString - string with hostname/ip of the mqtt server (ex 10.1.1.186)
+  * mqttServerPort - port for the mqtt server (ex 1883)
     server.
 
 # Building
@@ -28,7 +29,7 @@ and configuration:
 To build you need to add the following:
 
 * [Arduino ESP library](https://github.com/esp8266/Arduino)
-* [PubSubClient](https://github.com/knolleary/pubsubclient)
+* [PubSubClient](https://github.com/knolleary/pubsubclient) - v2.6
 
 libraries as libraries in your Arduino IDE.
 

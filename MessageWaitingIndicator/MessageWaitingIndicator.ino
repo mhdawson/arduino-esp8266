@@ -9,24 +9,24 @@
 #define LED_PIN D6
 #define MESSAGE_WAITING_TOPIC "phone/messageWaiting"
 
-IPAddress server(mqttServer[0], mqttServer[1],
-                 mqttServer[2], mqttServer[3]);
-
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
-PubSubClient client(wclient, server);
-
 boolean messageWaiting;
 boolean ledOn;
 
-void callback(const MQTT::Publish& pub) {
-  Serial.println("publish");
-  if(0 == strcmp(pub.payload_string().c_str(), "1")) {
+void callback(char* topic, uint8_t* message, unsigned int length) {
+  std::string messageBuffer((const char*) message, length);
+
+  Serial.print("publish: ");
+  Serial.println(messageBuffer.c_str());
+  if (0 == strcmp(messageBuffer.c_str(), "1")) {
     messageWaiting = true;
   } else {
     messageWaiting = false;
   }
 }
+
+PubSubClient client(mqttServerString, mqttServerPort, callback, wclient);
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
@@ -40,7 +40,10 @@ void setup() {
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
 
-  client.set_callback(callback);
+  WiFi.begin(ssid, pass);
+  if (WiFi.waitForConnectResult() == WL_CONNECTED) {
+    Serial.println("WiFi connected");
+  }
 }
 
 int count = 0;
@@ -52,17 +55,24 @@ void loop() {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Connecting to ");
     Serial.println(ssid);
-    WiFi.begin(ssid, pass);
+    WiFi.reconnect();
   
     if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+      Serial.println("Failed to reconnect WIFI");
+      Serial.println(WiFi.waitForConnectResult());
+      delay(100);
       return;
     }
     Serial.println("WiFi connected");
   }
 
   if (!client.connected()) {
+    Serial.println("PubSub not connected");
     if (client.connect("mwiclient")) {
+      Serial.println("PubSub connected");
       client.subscribe(MESSAGE_WAITING_TOPIC);
+    } else {
+      Serial.println("PubSub failed to connect");
     }
   }
 
