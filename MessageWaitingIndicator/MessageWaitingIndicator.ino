@@ -1,3 +1,6 @@
+// Copyright 2016-2017 the project authors as listed in the AUTHORS file.
+// All rights reserved. Use of this source code is governed by the
+// license that can be found in the LICENSE file.
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <Wire.h>
@@ -14,11 +17,15 @@ ESP8266WiFiGenericClass wifi;
 boolean messageWaiting;
 boolean ledOn;
 
+int livenessIndicator = 0;
 void callback(char* topic, uint8_t* message, unsigned int length) {
   std::string messageBuffer((const char*) message, length);
 
   Serial.print("publish: ");
+  Serial.print(livenessIndicator);
+  Serial.print("-");
   Serial.println(messageBuffer.c_str());
+  livenessIndicator = (livenessIndicator + 1);
   if (0 == strcmp(messageBuffer.c_str(), "1")) {
     messageWaiting = true;
   } else {
