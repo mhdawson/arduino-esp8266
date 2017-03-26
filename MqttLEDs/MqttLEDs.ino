@@ -17,6 +17,7 @@ ESP8266WiFiGenericClass wifi;
 
 const char* OFF = "off";
 const char* RANGE = "range";
+const char* CLEAR_AND_RANGE = "clear+range";
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -28,7 +29,14 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
     for(uint16_t i=0; i <strip.numPixels(); i++) {
       strip.setPixelColor(i, strip.Color(0,0,0));
     }
-  } else if (0 == strncmp(RANGE, messageBuffer.c_str(), strlen(RANGE))) {
+  } else if ((0 == strncmp(RANGE, messageBuffer.c_str(), strlen(RANGE))) ||
+             (0 == strncmp(CLEAR_AND_RANGE, messageBuffer.c_str(), strlen(CLEAR_AND_RANGE)))) {
+    if (0 == strncmp(CLEAR_AND_RANGE, messageBuffer.c_str(), strlen(CLEAR_AND_RANGE))) {
+      for(uint16_t i=0; i <strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(0,0,0));
+      }
+    }
+              
     char* next = strtok((char*) messageBuffer.c_str()," ");
     next = strtok(nullptr," ");
     int start = atoi(next);
