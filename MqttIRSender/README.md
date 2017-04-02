@@ -18,7 +18,7 @@ WirelessConfig.h which must be added to the project:
 
   * ssid - The id of the wireless network to connect to.
   * pass - the password for the wireless network.
-  * mqttServer - the mqtt server to which to connect to in
+  * mqttServerString - the mqtt server to which to connect to in
     TCP/IP dot notation (ex "10.1.1.186").
   * mqttServerPort - port for the mqtt server to connect to 
 
