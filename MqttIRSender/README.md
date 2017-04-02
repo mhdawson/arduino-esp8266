@@ -2,7 +2,7 @@
 
 This device provides a simple IR sender.  It does not 
 know about any specific codes, instead the raw timing
-information is sent through mqtt and the device simple
+information is sent through mqtt and the device simply
 sends out codes based on those timings. This approach
 allows the device itself to be quite simple, while
 being able to control a large range of devices with
