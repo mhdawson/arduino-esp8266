@@ -19,11 +19,54 @@ const char* OFF = "off";
 const char* RANGE = "range";
 const char* CLEAR_AND_RANGE = "clear+range";
 
+boolean extractRangeAndTarget(const char* buffer,
+                              int* start,
+                              int* end,
+                              int numPixels,
+                              uint8_t* R,
+                              uint8_t* G,
+                              uint8_t* B) {
+  *start = 0;
+  *end = 0;
+  *R = 0;
+  *G = 0;
+  *B = 0;
+  char* next = strtok((char*) buffer," ");
+  next = strtok(nullptr," ");
+  *start = atoi(next);
+  next = strtok(nullptr," ");
+  *end = atoi(next);
+  next = strtok(nullptr," ");
+  *R = atoi(next);
+  next = strtok(nullptr," ");
+  *G = atoi(next);
+  next = strtok(nullptr," ");
+  *B = atoi(next);
+  if ((*start < 0)  ||  
+      (*start >= numPixels)||
+      (*end >= numPixels) ||
+      (*end < 0) ||
+      (*end >= numPixels) ||
+      (*end < 0) ||
+      (*R > 255) ||
+      (*R < 0) ||
+      (*G > 255) ||
+      (*G < 0) ||
+      (*B > 255) ||
+      (*B < 0)) {
+    Serial.println("Message Invalid");   
+    return false;    
+  }             
+  return true;             
+}
+
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 void callback(char* topic, uint8_t* message, unsigned int length) {
   std::string messageBuffer((const char*) message, length);
   Serial.println(messageBuffer.c_str());
+   int start, end;
+   uint8_t R, G, B;
   
   if (0 == strcmp(messageBuffer.c_str(), OFF)) {
     for(uint16_t i=0; i <strip.numPixels(); i++) {
@@ -36,37 +79,12 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
         strip.setPixelColor(i, strip.Color(0,0,0));
       }
     }
-              
-    char* next = strtok((char*) messageBuffer.c_str()," ");
-    next = strtok(nullptr," ");
-    int start = atoi(next);
-    next = strtok(nullptr," ");
-    int end = atoi(next);
-    next = strtok(nullptr," ");
-    int R = atoi(next);
-    next = strtok(nullptr," ");
-    int G = atoi(next);
-    next = strtok(nullptr," ");
-    int B = atoi(next);
-    if ((start < 0)  ||  
-        (start >= strip.numPixels()) ||
-        (end >= strip.numPixels()) ||
-        (end < 0) ||
-        (end >= strip.numPixels()) ||
-        (end < 0) ||
-        (R > 255) ||
-        (R < 0) ||
-        (G > 255) ||
-        (G < 0) ||
-        (B > 255) ||
-        (B < 0)) {
-      Serial.println("Message Invalid");   
-      return;    
-    } 
 
-    end = end + 1;
-    for(uint16_t i = start; i < end; i++) {
-      strip.setPixelColor(i, strip.Color(R, G, B));
+    if (extractRangeAndTarget(messageBuffer.c_str(), &start, &end, strip.numPixels(), &R, &G, &B)) {
+      end = end + 1;
+      for(uint16_t i = start; i < end; i++) {
+        strip.setPixelColor(i, strip.Color(R, G, B));
+      }
     }
   } else {
     Serial.println("Message Invalid");   
