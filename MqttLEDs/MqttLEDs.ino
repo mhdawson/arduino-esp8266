@@ -77,6 +77,30 @@ void clearQueue() {
   }
 }
 
+boolean extractTarget(uint8_t* R,
+                      uint8_t* G,
+                      uint8_t* B) {
+  *R = 0;
+  *G = 0;
+  *B = 0;
+  char* next = strtok(nullptr," ");
+  *R = atoi(next);
+  next = strtok(nullptr," ");
+  *G = atoi(next);
+  next = strtok(nullptr," ");
+  *B = atoi(next);
+  if ((*R > 255) ||
+      (*R < 0) ||
+      (*G > 255) ||
+      (*G < 0) ||
+      (*B > 255) ||
+      (*B < 0)) {
+    Serial.println("Message Invalid");
+    return false;
+  }
+  return true;
+}
+
 boolean extractRangeAndTarget(const char* buffer,
                               int* start,
                               int* end,
@@ -86,36 +110,21 @@ boolean extractRangeAndTarget(const char* buffer,
                               uint8_t* B) {
   *start = 0;
   *end = 0;
-  *R = 0;
-  *G = 0;
-  *B = 0;
   char* next = strtok((char*) buffer," ");
   next = strtok(nullptr," ");
   *start = atoi(next);
   next = strtok(nullptr," ");
   *end = atoi(next);
-  next = strtok(nullptr," ");
-  *R = atoi(next);
-  next = strtok(nullptr," ");
-  *G = atoi(next);
-  next = strtok(nullptr," ");
-  *B = atoi(next);
   if ((*start < 0)  ||  
       (*start >= numPixels)||
       (*end >= numPixels) ||
       (*end < 0) ||
       (*end >= numPixels) ||
-      (*end < 0) ||
-      (*R > 255) ||
-      (*R < 0) ||
-      (*G > 255) ||
-      (*G < 0) ||
-      (*B > 255) ||
-      (*B < 0)) {
-    Serial.println("Message Invalid");   
+      (*end < 0)) {
+    Serial.println("Message Invalid");
     return false;    
   }             
-  return true;             
+  return extractTarget(R, G, B);
 }
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, LED_PIN, NEO_GRB + NEO_KHZ800);
