@@ -11,7 +11,7 @@
 
 #define LED_PIN D6
 #define LED_TOPIC "house/led"
-#define DELAY_MILLIS 50
+#define DELAY_MILLIS 20
 
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
@@ -23,8 +23,14 @@ const char* RANGE = "range";
 const char* CLEAR_AND_RANGE = "clear+range";
 const char* FADE = "fade";
 const char* CYCLE = "cycle";
+const char* FIRE = "fire";
 
 #define FADE_COMMAND 1
+#define FIRE_COMMAND 2
+
+#define FIRE_RED 255
+#define FIRE_GREEN 100
+#define FIRE_BLUE 10
 
 uint8_t current_R = 0;
 uint8_t current_G = 0;
@@ -118,12 +124,9 @@ boolean extractTarget(uint8_t* R,
   return true;
 }
 
-boolean extractRangeAndTarget(int* start,
-                              int* end,
-                              int numPixels,
-                              uint8_t* R,
-                              uint8_t* G,
-                              uint8_t* B) {
+boolean extractRange(int* start,
+                     int* end,
+                     int numPixels) {
   *start = 0;
   *end = 0;
   char* next = strtok(nullptr," ");
@@ -139,7 +142,19 @@ boolean extractRangeAndTarget(int* start,
     Serial.println("Message Invalid");
     return false;    
   }             
-  return extractTarget(R, G, B);
+  return true;
+}
+
+boolean extractRangeAndTarget(int* start,
+                              int* end,
+                              int numPixels,
+                              uint8_t* R,
+                              uint8_t* G,
+                              uint8_t* B) {
+  if (extractRange(start, end, numPixels)) {
+    return extractTarget(R, G, B);
+  } 
+  return false;
 }
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, LED_PIN, NEO_GRB + NEO_KHZ800);
@@ -220,6 +235,47 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
       command->next_command = nullptr;
       enqueueCommand(command);
       Serial.println("Fade enqueued");
+    } else {
+      delete command;
+    }
+  } else if (0 == strncmp(FIRE, messageBuffer.c_str(), strlen(FADE))) {
+    CommandEntry* command = new CommandEntry;
+    char* next = strtok((char*) messageBuffer.c_str()," ");
+
+    next = strtok(nullptr," ");
+    command->duration = atoi(next); 
+    if (command->duration < 0) {
+      Serial.println("Invalid duration"); 
+      delete command;
+      return;
+    }
+
+    // max dip for green for flicker
+    next = strtok(nullptr," ");
+    command->G = atoi(next);
+    if ((command->G < 0) || (command->G > 100)) {
+      Serial.println("Invalid Green dip"); 
+      delete command;
+      return;
+    }
+
+    // max brightness dip
+    next = strtok(nullptr," ");
+    command->B = atoi(next);  
+    if ((command->B < 0) || (command->B > 100)) {
+      Serial.println("Invalid Brightness dip"); 
+      delete command;
+      return;
+    }
+    
+    if (extractRange(&command->range_start, 
+                     &command->range_end, 
+                     strip.numPixels())) {
+      command->command = FIRE_COMMAND;
+      command->next_command = nullptr;
+      clearQueue();
+      enqueueCommand(command);
+      Serial.println("Fire enqueued");
     } else {
       delete command;
     }
@@ -327,6 +383,19 @@ void loop() {
           dequeueHead();
           enqueueCommand(command->next_command);
         }
+      }
+    } else if (FIRE_COMMAND == command->command) {
+      if ((count * DELAY_MILLIS ) > command->duration) {
+        for(uint16_t i = command->range_start; i <= command->range_end; i++) {
+          int brightness = random(100 - command->B,100);
+          strip.setPixelColor(i, strip.Color((FIRE_RED * brightness)/100, 
+                                             random(((FIRE_GREEN - command->G)*brightness)/100, (FIRE_GREEN * brightness)/100),
+                                             (FIRE_BLUE * brightness)/100));
+        }
+        strip.show();
+        count = 0;
+      } else {
+        count ++;
       }
     }
   }
