@@ -238,7 +238,7 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
     } else {
       delete command;
     }
-  } else if (0 == strncmp(FIRE, messageBuffer.c_str(), strlen(FADE))) {
+  } else if (0 == strncmp(FIRE, messageBuffer.c_str(), strlen(FIRE)) {
     CommandEntry* command = new CommandEntry;
     char* next = strtok((char*) messageBuffer.c_str()," ");
 
