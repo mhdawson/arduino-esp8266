@@ -20,7 +20,7 @@ the device as descibed in the `building` section.
 
 `off`
 
-cancels all existing queued commands.
+Cancels all existing queued commands.
 
 ## range
 
@@ -36,14 +36,14 @@ where:
 * G - number between 0 and 255 for green component of the color to bet set
 * B - number between 0 and 255 for blue component of the color to bet set
 
-cancels all existing queued commands.
+Cancels all existing queued commands.
 
 ## clear+range
 
 Same as for range except the command at the start is `clear+range` instead
 of `range`.
 
-cancels all existing queued commands.
+Cancels all existing queued commands.
 
 ## fade
 
@@ -101,6 +101,25 @@ with the fade between each color being 5000 milliseconds (5 seconds).  In this
 example the lights will continuously fade between these 3 colors until
 another command is executed.
 
+Cancels all existing queued commands.
+
+## fire
+
+`fire duration green_dip brightness_dip start end`
+
+* duration - number of milliseconds between changes in lights
+* greend_dip - the intensity of the green component is varied to 
+  simulate burning.  This is the maximum amount to vary the green
+  by and must between 0 and 100.
+* brightness_dip - the brightness is varied to simulate flikering.
+  This is the percent brightnes variatoin between max/min brightness.
+  It must be between 0 and 100.
+* start - number between 0 and x -1 where x is the number of lights
+  in the strip 
+* end - number between 0 and x -1 where x is the number of lights
+  in the strip
+
+Cancels all existing queued commands.
 
 # Configuration
 
