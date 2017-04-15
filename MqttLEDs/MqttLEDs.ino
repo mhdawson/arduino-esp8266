@@ -24,6 +24,7 @@ const char* CLEAR_AND_RANGE = "clear+range";
 const char* FADE = "fade";
 const char* CYCLE = "cycle";
 const char* FIRE = "fire";
+const char* BRIGHTNESS = "brightness";
 
 #define FADE_COMMAND 1
 #define FIRE_COMMAND 2
@@ -238,7 +239,7 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
     } else {
       delete command;
     }
-  } else if (0 == strncmp(FIRE, messageBuffer.c_str(), strlen(FIRE)) {
+  } else if (0 == strncmp(FIRE, messageBuffer.c_str(), strlen(FIRE))) {
     CommandEntry* command = new CommandEntry;
     char* next = strtok((char*) messageBuffer.c_str()," ");
 
@@ -285,6 +286,15 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
       strip.setPixelColor(i, strip.Color(0,0,0));
     }
     setCurrent(0, 0, 0);
+  } else if (0 == strncmp(BRIGHTNESS, messageBuffer.c_str(), strlen(BRIGHTNESS))) {
+    char* next = strtok((char*) messageBuffer.c_str()," ");
+    next = strtok(nullptr," ");
+    int brightness = atoi(next);
+    if ((brightness < 0) || (brightness > 100)) {
+      Serial.println("Invalid Brightness");
+      return;
+    }
+    strip.setBrightness(brightness);
   } else if ((0 == strncmp(RANGE, messageBuffer.c_str(), strlen(RANGE))) ||
              (0 == strncmp(CLEAR_AND_RANGE, messageBuffer.c_str(), strlen(CLEAR_AND_RANGE)))) {
     clearQueue();
