@@ -150,6 +150,7 @@ topic that the the device should listen on.
 
 # Schematic
 
+![schematic](https://github.com/mhdawson/arduino-esp8266/blob/master/pictures/leds-circuit.png)
 
 # Pictures
 
@@ -157,3 +158,4 @@ topic that the the device should listen on.
 # Main Components
 
 * [NodeMCU D1](http://www.ebay.com/itm/NodeMCU-Lua-ESP-12-WeMos-D1-Mini-WIFI-4M-Bytes-Development-Board-Module-ESP8266-/321989574625)
+* [WS2812 LED String](http://www.ebay.ca/itm/112257073033?_trksid=p2060353.m2749.l2649&var=412669931593&ssPageName=STRK%3AMEBIDX%3AIT)
