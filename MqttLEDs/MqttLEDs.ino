@@ -9,7 +9,7 @@
 // device specifics
 #include "WirelessConfig.h"
 
-#define LED_PIN D6
+#define LED_PIN D5
 #define LED_TOPIC "house/led"
 #define DELAY_MILLIS 20
 
@@ -365,7 +365,7 @@ void loop() {
 
   if (!client.connected()) {
     Serial.println("PubSub not connected");
-    if (client.connect("irclient")) {
+    if (client.connect("mqttleds1")) {
       Serial.println("PubSub connected");
       client.subscribe(LED_TOPIC);
     } else {
