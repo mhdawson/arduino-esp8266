@@ -12,6 +12,8 @@
 
 #define TRANSMIT_INTERVAL_SECONDS 120
 
+#define LOOP_DELAY 100
+
 IPAddress server(mqttServer[0], mqttServer[1],
                  mqttServer[2], mqttServer[3]);
 
@@ -25,35 +27,51 @@ IPAddress server(mqttServer[0], mqttServer[1],
 #define MAX_TOPIC_LEN 128
 #define MIN_TEMP_INTERVAL 10
 #define MAX_TEMP_MESSAGE_SIZE 100
+
 #define DS18B20_PIN D4  // don't use D0 or D2 as can interfere with boot
 OneWire ds(DS18B20_PIN);
 DallasTemperature tempSensors(&ds);
 
-void callback(const MQTT::Publish& pub) {
-  Serial.println(pub.payload_string());
-  // handle message arrived
-}
+#define BUTTON_PUSH_TIME 2000
+#define GARAGE_REMOTE_BUTTON D6
+#define GARAGE_DOOR_TOPIC "house/garage"
 
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
-PubSubClient client(wclient, server);
+
+int remainingButtonTime = 0;
+void callback(char* topic, uint8_t* message, unsigned int length) {
+  // the only message we current expect is to push the
+  // button for the garage door (open/close) which is "DOOR"
+  std::string messageBuffer((const char*) message, length);
+  Serial.println(messageBuffer.c_str());
+  if (strcmp(messageBuffer.c_str(), "DOOR") == 0) {
+    remainingButtonTime = BUTTON_PUSH_TIME;
+    digitalWrite(GARAGE_REMOTE_BUTTON, HIGH);
+  }
+}
+
+PubSubClient client(mqttServerString, mqttServerPort, callback, wclient);
 
 int counter = 0;
 int lastState = 0;
 
 void setup() {
   delay(1000);
-  // Setup console
+
+  // Setup pins
   pinMode(OPEN_CLOSE_PIN, INPUT);
+  pinMode(GARAGE_REMOTE_BUTTON, OUTPUT);
+  digitalWrite(GARAGE_REMOTE_BUTTON, LOW);
+
+  // Setup console
   Serial.begin(115200);
   delay(10);
   Serial.println();
-  Serial.println();
+  Serial.println("Started");
 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
-
-  client.set_callback(callback);
 
   // first reading always seems to be wrong, read it early and
   // throw it away
@@ -62,11 +80,44 @@ void setup() {
 
 void loop() {
   client.loop();
-  
   // we transmit the state of the door and the temperature every
   // TRANSMIT_INTERVAL_SECONDS or when the state (open/close) of
   // the door changes
-  delay(100);
+  delay(LOOP_DELAY);
+
+  // make sure we are good for wifi
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+    WiFi.reconnect();
+
+    if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+      Serial.println("Failed to reconnect WIFI");
+      Serial.println(WiFi.waitForConnectResult());
+      delay(100);
+      return;
+    }
+  }
+
+    
+  if (!client.connected()) {
+    if (client.connect("arduinoClient2")) {
+      Serial.println("PubSub connected");
+      client.subscribe(GARAGE_DOOR_TOPIC);
+    } else {
+      Serial.println("PubSub failed to connect");
+    }
+  }
+
+  // check if is time for the remote button to be turned off
+  if (remainingButtonTime > 0 ) {
+    remainingButtonTime = remainingButtonTime - LOOP_DELAY;
+    if (remainingButtonTime <= 0) {
+      remainingButtonTime = 0;
+      digitalWrite(GARAGE_REMOTE_BUTTON, LOW);
+    }
+  }
+
   counter++;
   int state = digitalRead(OPEN_CLOSE_PIN);
   if ((lastState != state) || (counter == (TRANSMIT_INTERVAL_SECONDS * 10))) {
@@ -80,23 +131,6 @@ void loop() {
       strncat(message, CLOSED, NUM_CHARS_IN_MESSAGE);
     }
      
-    if (WiFi.status() != WL_CONNECTED) {
-      Serial.print("Connecting to ");
-      Serial.print(ssid);
-      Serial.println("...");
-      WiFi.begin(ssid, pass);
-  
-      if (WiFi.waitForConnectResult() != WL_CONNECTED)
-        return;
-      Serial.println("WiFi connected");
-    }
-  
-    if (!client.connected()) {
-      if (client.connect("arduinoClient")) {
-        client.subscribe("inTopic");
-      }
-    }
-
     // send out door state
     char doorTopic[MAX_TOPIC_LEN];
     memset(doorTopic, 0, MAX_TOPIC_LEN);
