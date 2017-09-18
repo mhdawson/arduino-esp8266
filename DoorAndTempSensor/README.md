@@ -78,5 +78,5 @@ With the addition of the remote control for the door
 * [Door contact](http://www.ebay.ca/itm/5-Set-Recessed-Door-Window-Contact-Magnetic-Reed-Switch-Sensor-Security-Alarm-/381198534569?hash=item58c13407a9:g:U7IAAOSw-7RVCm9F)
 * [NodeMCU D1](http://www.ebay.com/itm/NodeMCU-Lua-ESP-12-WeMos-D1-Mini-WIFI-4M-Bytes-Development-Board-Module-ESP8266-/321989574625)
 * [Liftmaster 373LM](http://www.ebay.ca/itm/139-53753-Liftmaster-compatible-Remote-370LM-371LM-372LM-373LM-374LM-139-18191-/112300428115?hash=item1a25a08b53:g:IzcAAOSwvflZW8Ez)
-* [1-Channel Relay Module ](1-Channel H/L Level Triger Optocoupler Relay Module for Arduino 5V New)
+* [1-Channel Relay Module](1-Channel H/L Level Triger Optocoupler Relay Module for Arduino 5V New)
 
