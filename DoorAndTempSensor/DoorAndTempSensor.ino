@@ -33,7 +33,7 @@ OneWire ds(DS18B20_PIN);
 DallasTemperature tempSensors(&ds);
 
 #define BUTTON_PUSH_TIME 2000
-#define GARAGE_REMOTE_BUTTON D6
+#define GARAGE_REMOTE_BUTTON D7
 #define GARAGE_DOOR_TOPIC "house/garage"
 
 WiFiClient wclient;
