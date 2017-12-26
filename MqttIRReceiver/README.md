@@ -8,7 +8,7 @@ This approach allows the device itself to be quite simple,
 while being able to receive from a large range of devices with
 proper back-end control.
 
-The back end control will initially be mangaed through
+The back end control will initially be managed through
 [micro-app-ir-to-mqtt-bridge](https://github.com/mhdawson/micro-app-ir-to-mqtt-bridge).
 
 The receiver collects raw IR data until a `space` larger than
