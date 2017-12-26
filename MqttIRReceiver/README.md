@@ -11,6 +11,18 @@ proper back-end control.
 The back end control will initially be mangaed through
 [micro-app-ir-to-mqtt-bridge](https://github.com/mhdawson/micro-app-ir-to-mqtt-bridge).
 
+The receiver collects raw IR data until a `space` larger than
+END_TIME_VALUE (0.1s at time of writing) and which point it sends
+all of the values in a single MQTT message.  The message is
+formatted as `A1, A2, .... An`. Each of the Ax is the number
+microseconds in HEX for the `space` or `mark`.  The message starts with a
+`space` which is followed by a `mark`, then by a `space` and so on
+alternating between the two. For example:
+
+```
+20faf,7b,1e25,160,257,5a2,15c,43d,527,1f7
+```
+
 # Configuration
 
 The wifi configuration and mqttServer address are configured in
