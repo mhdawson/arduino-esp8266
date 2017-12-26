@@ -19,9 +19,6 @@ static unsigned int globalEntries[MAX_CODE_ENTRIES];
 static int globalCurrentEntry = 0;
 static unsigned long globalLastInterruptTime;
 
-IPAddress server(mqttServer[0], mqttServer[1],
-                 mqttServer[2], mqttServer[3]);
-
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
 
@@ -52,7 +49,7 @@ void setup() {
   pinMode(RX_IR_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(RX_IR_PIN),&handleInterrupt,CHANGE);
 
-  // turn of the Access Point as we are not using it
+    // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
 
   WiFi.begin(ssid, pass);
