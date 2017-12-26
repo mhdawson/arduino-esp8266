@@ -2,8 +2,8 @@
 
 This device provides a simple IR receiver.  It does not 
 know about any specific codes, instead the raw timing
-information is sent through mqtt by the IR receiver.
-It is up to the back end to decode the IR signales.
+information is sent by the receive  through mqtt to a back end.
+It is up to the back end to decode the IR signals.
 This approach allows the device itself to be quite simple,
 while being able to receive from a large range of devices with
 proper back-end control.
@@ -39,7 +39,7 @@ as libraries in your Arduino IDE.
 
 You will then want to modify `#define IR_TOPIC "house/ir1"` to specify the
 topic that the the device will publish to. Note that you should have each
-device publish a different topic as the IR_TOPIC is also used to set the
+device publish to a different topic as the IR_TOPIC is also used to set the
 mqtt ID for the device.
 
 # Schematic
@@ -55,10 +55,10 @@ mqtt ID for the device.
 
 You can 3D print the case that I designed.  The stl file is:
 
-[3D model](https://github.com/mhdawson/arduino-esp8266/blob/master/pictures/IR%20Case.stl)
+![3D model](https://github.com/mhdawson/arduino-esp8266/blob/master/pictures/IR%20Case.stl)
 
-In order to assemble I used krazy glue to glue in the IR receiver, and a small
-amount of electrical tape rolled up at the end of the WeMos D1
+In order to assemble the overall device I used krazy glue to glue in the
+IR receiver and a small amount of electrical tape rolled up at the end of the WeMos D1
 (on the opposite side of the USB port) to help wedge in the WeMos.
 
 # Main Components
