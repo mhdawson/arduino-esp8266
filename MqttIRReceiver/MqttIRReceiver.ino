@@ -13,11 +13,14 @@
 #define MAX_CODE_ENTRIES 500
 #define END_TIME_VALUE 100000
 #define MIN_MESSAGE_ENTRIES 20
+#define MIN_PULSE_LENGTH 400
+#define MIN_START_MARK_LENGTH 1000
 #define IR_TOPIC "house/ir1"
 
-static unsigned int globalEntries[MAX_CODE_ENTRIES];
-static int globalCurrentEntry = 0;
-static unsigned long globalLastInterruptTime;
+static int globalCurrentValue = 0;
+static unsigned long globalEntries[MAX_CODE_ENTRIES];
+static volatile int globalCurrentEntry = 0;
+static volatile unsigned long globalLastInterruptTime;
 
 WiFiClient wclient;
 ESP8266WiFiGenericClass wifi;
@@ -27,13 +30,16 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
 PubSubClient client(mqttServerString, mqttServerPort, callback, wclient);
 
 ICACHE_RAM_ATTR void handleInterrupt() {
+  // validate that we have actually changed state
+  int lastValue = globalCurrentValue;
+  globalCurrentValue = digitalRead(RX_IR_PIN);
+  if (lastValue == globalCurrentValue) {
+    // value has not changed so don't do anything
+    return;
+  };
 
-  // get the duration of the pulse
   unsigned long timeMicros = micros();
   unsigned long duration = timeMicros - globalLastInterruptTime;
-  if (duration > ((unsigned int) duration)) {
-    duration = INT_MAX;
-  }
   globalEntries[globalCurrentEntry] = duration;
   globalCurrentEntry++;
   globalLastInterruptTime = timeMicros;
@@ -43,10 +49,7 @@ ICACHE_RAM_ATTR void handleInterrupt() {
 }
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println("starting");
-
-  pinMode(RX_IR_PIN, INPUT);
+  pinMode(RX_IR_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(RX_IR_PIN),&handleInterrupt,CHANGE);
 
     // turn of the Access Point as we are not using it
@@ -54,7 +57,6 @@ void setup() {
 
   WiFi.begin(ssid, pass);
   if (WiFi.waitForConnectResult() == WL_CONNECTED) {
-    Serial.println("WiFi connected");
   }
 }
 
@@ -65,26 +67,17 @@ void loop() {
 
   // make sure we are good for wifi
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
     WiFi.reconnect();
-
     if (WiFi.waitForConnectResult() != WL_CONNECTED) {
-      Serial.println("Failed to reconnect WIFI");
-      Serial.println(WiFi.waitForConnectResult());
       delay(100);
       return;
     }
   }
 
   if (!client.connected()) {
-    Serial.println("PubSub not connected");
     String clientId = String(IR_TOPIC) + String("IR_Receiver");
     if (client.connect(clientId.c_str())) {
-      Serial.println("PubSub connected");
-      //client.subscribe(LED_TOPIC);
     } else {
-      Serial.println("PubSub failed to connect");
     }
   }
 
@@ -94,7 +87,7 @@ void loop() {
   long lastInterruptTime = globalLastInterruptTime;
   long duration = micros() - globalLastInterruptTime;
   if ((duration > END_TIME_VALUE)&&(globalCurrentEntry != 0)) {
-    unsigned int currentEntries[MAX_CODE_ENTRIES];
+    unsigned long currentEntries[MAX_CODE_ENTRIES];
     int numberEntries = 0;
     bool emitMessage = false;
     noInterrupts();
@@ -106,17 +99,33 @@ void loop() {
       numberEntries = globalCurrentEntry;
       memcpy(currentEntries, globalEntries, sizeof(int)*globalCurrentEntry);
       globalCurrentEntry = 0;
-      if (numberEntries > MIN_MESSAGE_ENTRIES) {
-        // anything shorter is not a real message
-        emitMessage = true;
-      }
-    }
+      emitMessage = true;
+     }
     interrupts();
+    
     if (emitMessage) {
+      // eliminate short pulses as they are just noise
+      int j = 0;
+      for (int i = 0; i < numberEntries; i++) {
+        if ((currentEntries[i] > MIN_PULSE_LENGTH) || (j == 0 ) || ((i + 1) >= numberEntries)) {
+          currentEntries[j] = currentEntries[i];
+          j++;
+        } else {
+          currentEntries[j-1] = currentEntries[j-1] + currentEntries[i] + currentEntries[i+1];
+          i++;
+        }
+      }
+      numberEntries = j;
+
+      if (numberEntries < MIN_MESSAGE_ENTRIES) {
+        // anything shorter is not a real message
+        return;
+      }
+
       String message;
-      for (int i=0; i < numberEntries; i++) {
+      for (int i = 0; i < numberEntries; i++) {
         char buffer[sizeof(int)*2 + 1];
-        message = message + String(ltoa(currentEntries[i], buffer, 16));
+        message = message + String(ultoa(currentEntries[i], buffer, 16));
         if (i != numberEntries -1) {
           message = message + String(",");
         }
