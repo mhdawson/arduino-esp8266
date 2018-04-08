@@ -21,6 +21,8 @@
 
 #define RX_433_PIN D4
 
+char macAddress[] = "00:00:00:00:00:00";
+
 void callback(char* topic, uint8_t* message, unsigned int length) {};
 
 ESP8266WiFiGenericClass wifi;
@@ -72,6 +74,18 @@ void setup() {
   // receiver.registerDevice(new ArduinoTHSensor2(&client, "esp/house/arduinoTHSensor"));
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
+
+  // get the mac address to be used as a unique id for connecting to the mqtt server
+  byte macRaw[6];
+  WiFi.macAddress(macRaw);
+  sprintf(macAddress,
+          "%02.2X:%02.2X:%02.2X:%02.2X:%02.2X:%02.2X",
+          macRaw[0],
+          macRaw[1],
+          macRaw[2],
+          macRaw[3],
+          macRaw[4],
+          macRaw[5]);
 }
 
 void loop() {
@@ -88,10 +102,12 @@ void loop() {
       return;
     }
   }
-  
+
   if (!client.connected()) {
-    if (client.connect("cottage-443rx1")) {
-      Serial.println("mqtt connected\n");
+    if (client.connect(macAddress)) {
+      Serial.println("mqtt connected:");
+      Serial.println(macAddress);
+      Serial.println("\n");
     }
   }
 
