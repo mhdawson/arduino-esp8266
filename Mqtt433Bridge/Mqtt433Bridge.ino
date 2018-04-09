@@ -89,8 +89,7 @@ void setup() {
 }
 
 void loop() {
-  delay(2000);
-
+  delay(500);
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Connecting to ");
     Serial.print(ssid);
@@ -112,6 +111,7 @@ void loop() {
   }
 
   receiver.handleMessage();
+  client.loop();
 }
 
 
