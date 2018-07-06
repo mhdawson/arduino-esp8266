@@ -124,7 +124,7 @@ void SLTX583::decodeMessage(Message* message) {
    message->type = 1;
    char channel = ((bytes[2] & 0x30) >> 4) + 1;
    char humidity = bytes[0];
-   float temp = (bytes[3] & 0xF)*256 + bytes[1];
+   float temp = (bytes[2] & 0xF)*256 + bytes[1];
    snprintf(message->text, MAX_MESSAGE_TEXT_LENGTH, "%ld, %x - temp: %.1f, hum: %d, chan: %d", message->timestamp, message->code, temp/10, humidity, channel);
 };
 
@@ -148,7 +148,7 @@ void SLTX583::getMessageText(int messageNum, Message* message, char* buffer, int
    char* bytes = (char*) &message->code;
 
    if (messageNum == 0) {
-      float temp = (bytes[3] & 0xF)*256 + bytes[1];
+      float temp = (bytes[2] & 0xF)*256 + bytes[1];
       snprintf(buffer,
                maxLength,
                "%ld, %x - temp: %.1f", message->timestamp, message->code, temp/10);
