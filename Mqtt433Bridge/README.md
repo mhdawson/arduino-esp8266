@@ -55,7 +55,7 @@ You likely also want to adjust the receiver.registerDevice(...) lines for each o
 - Blueline Power monitor
 - Meat thermometer
 - Custom devices from [arduino-sensors](https://github.com/mhdawson/arduino-sensors)
-- Generic SLTX583 base temp/humdity sensor
+- Generic SLTX583 based temp/humdity sensor
 
 ### Lacross 141
 The Lacross 141 is available at Canadian tire and often goes on sale for $10-$15
