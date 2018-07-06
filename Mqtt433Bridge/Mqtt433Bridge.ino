@@ -13,6 +13,7 @@
 #include "Device1527.h"
 #include "LacrossTX141.h"
 #include "Device2262.h"
+#include "SLTX583.h"
 //#include "BluelineDevice.h"
 //#include "ArduinoTHSensor.h"
 //#include "ArduinoLightSensor.h"
@@ -67,6 +68,7 @@ void setup() {
   receiver.registerDevice(new Device1527(350, 50, 4, &client, "house/1527/350"));
   receiver.registerDevice(new LacrossTX141(&client, "house/lacrossTX141"));
   receiver.registerDevice(new MeatThermometer1(&client, "house/meat/temp"));
+  receiver.registerDevice(new SLTX583(&client, "house/SLTX583"));
   // receiver.registerDevice(new BluelineDevice(0x1efd, &client, "esp/house/blueline"));
   // receiver.registerDevice(new ArduinoTHSensor(&client, "esp/house/arduinoTHSensor"));
   // receiver.registerDevice(new ArduinoLightSensor(&client, "esp/house/arduinoLightSensor"));
