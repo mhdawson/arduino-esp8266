@@ -55,6 +55,7 @@ You likely also want to adjust the receiver.registerDevice(...) lines for each o
 - Blueline Power monitor
 - Meat thermometer
 - Custom devices from [arduino-sensors](https://github.com/mhdawson/arduino-sensors)
+- Generic SLTX583 base temp/humdity sensor
 
 ### Lacross 141
 The Lacross 141 is available at Canadian tire and often goes on sale for $10-$15
@@ -116,6 +117,11 @@ Generic meat thermometer.
 
 I have it working with one that looks like this from Amazon, and have ordered a couple from ebay to validate that all of the ones that look like these work the same. [ebay link](http://www.ebay.com/itm/122090166085?_trksid=p2060353.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
 
+### Generic SLTX583 device
+
+Available from ebay
+[ebay link to temp/hum sensor](https://www.ebay.com/itm/433MHz-RF-Weather-Station-Digital-Thermometer-Humidity-Sensor-Wireless/262866895784?epid=1866294002&hash=item3d341683a8:g:I8cAAOSw9mpaN2c4)
+
 ## Adding a new device
 
 I plan on adding a "how to" with respect to figuring out the encoding and adding a new device in this project [PI433WirelessRecvManager-Decoding](https://github.com/mhdawson/PI433WirelessRecvManager-Decoding).
@@ -143,6 +149,11 @@ The following are a few pictures of my build:
 ![picture1](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/esp-433-bridge-1.jpg)
 
 ![picture2](https://raw.githubusercontent.com/mhdawson/arduino-esp8266/master/pictures/esp-433-bridge-2.jpg)
+
+The following is 3d stl for case I used for second build
+
+![3d case](https://github.com/mhdawson/3dprints/blob/master/2018/433BridgeCase.stl)
+
 
 # Main Components
 
