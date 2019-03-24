@@ -93,6 +93,7 @@ void setup() {
 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
+  WiFi.begin(ssid, pass);
 
   // first reading always seems to be wrong, read it early and
   // throw it away
@@ -124,7 +125,7 @@ void loop() {
     if (WiFi.waitForConnectResult() != WL_CONNECTED) {
       Serial.println("Failed to reconnect WIFI");
       Serial.println(WiFi.waitForConnectResult());
-      delay(100);
+      delay(1000);
       return;
     }
   }

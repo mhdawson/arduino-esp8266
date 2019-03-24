@@ -72,6 +72,7 @@ void setup() {
 
   // turn of the Access Point as we are not using it
   wifi.mode(WIFI_STA);
+  WiFi.begin(ssid, pass);
 
   // first reading always seems to be wrong, read it early and
   // throw it away
