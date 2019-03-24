@@ -18,7 +18,7 @@
 #define LOOP_DELAY 100
 
 #define LED_PIN D3
-#define LED_ON_TIME_SECONDS 2
+#define LED_BLINK_TIME_SECONDS 2
 
 #define MAX_MESSAGE_SIZE 100
 
@@ -28,12 +28,24 @@
 OneWire ds(DS18B20_PIN);
 DallasTemperature tempSensors(&ds);
 
+bool ledOn = true;
+void toggleLED() {
+  if (ledOn) {
+    ledOn = false;
+    digitalWrite(LED_PIN, LOW);
+  } else {
+    ledOn  = true;
+    digitalWrite(LED_PIN, HIGH);
+  }
+}
 
 void callback(char* topic, uint8_t* message, unsigned int length) {
   if (strncmp((const char*)message,"on", strlen("on")) == 0) {
     digitalWrite(LED_PIN, HIGH);
+    ledOn = true;
   } else {
     digitalWrite(LED_PIN, LOW);
+    ledOn = false;
   }
 };
 
@@ -146,9 +158,9 @@ void loop() {
     snprintf(lightMessage, MAX_MESSAGE_SIZE, "0, 0 - light: %d", lightValue);
     client.publish(LIGHT_TOPIC, lightMessage);
 
-    digitalWrite(LED_PIN, HIGH);
+    toggleLED();
     counter = 0;
-  } else if (counter == (LED_ON_TIME_SECONDS * (MILLIS_IN_SECOND/LOOP_DELAY))) {
-    digitalWrite(LED_PIN, LOW);
+  } else if (counter == (LED_BLINK_TIME_SECONDS * (MILLIS_IN_SECOND/LOOP_DELAY))) {
+    toggleLED();
   }
 }
