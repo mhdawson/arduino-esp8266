@@ -6,4 +6,5 @@
 #define __SENSOR_CONFIG_H__
 #define LIGHT_TOPIC "factory/1/light"
 #define TEMP_TOPIC  "factory/1/temp"
+#define LED_TOPIC   "factory/1/led"
 #endif
