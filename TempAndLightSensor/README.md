@@ -15,7 +15,7 @@ and configuration.
     TCP/IP dot notation (ex "10.1.1.186").
   * mqttServerPort - port for the mqtt server to connect to 
 
-If using certificates the follwing are also required
+* If using certificates the follwing are also required
   * client_cert - bytes in DER format
   * client_cert_len - length in bytes of client cert
   * client_key -  bytes in DER format
