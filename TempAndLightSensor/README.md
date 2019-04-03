@@ -15,10 +15,18 @@ and configuration.
     TCP/IP dot notation (ex "10.1.1.186").
   * mqttServerPort - port for the mqtt server to connect to 
 
+If using certificates the follwing are also required
+  * client_cert - bytes in DER format
+  * client_cert_len - length in bytes of client cert
+  * client_key -  bytes in DER format
+  * client_key_len - length in bytes of key
+
 * Device configuration from configuration for device in SensorConfig.h
   * LIGHT_TOPIC - mqtt topic to post light intensity (0-1024).
   * TEMP_TOPIC - mqtt topic to post temperature to.
   * TEMP_TOPIC - mqtt topic to topic to listen on for LED on/off message
+
+See the sample [WirelessConfig.h.sample](https://github.com/mhdawson/arduino-esp8266/blob/master/TempAndLightSensor/WirelessConfig.h.sample) more more details;
 
 # Building
 
@@ -52,4 +60,4 @@ The following are a few pictures of my build:
 
 * [DS18B20 Temp Sensor](https://www.ebay.ca/itm/DALLAS-18B20-DS18B20-TO-92-Wire-Digital-Thermometer-Temperature-IC-Sensor/152757780361)
 * [NodeMCU D1](http://www.ebay.com/itm/NodeMCU-Lua-ESP-12-WeMos-D1-Mini-WIFI-4M-Bytes-Development-Board-Module-ESP8266-/321989574625)
-* [Light Sensor - 5516 GL5516 NT00183] (http://www.ebay.ca/itm/20Pcs-Light-Sensitive-Inductor-Photo-Resistor-Photoresistor-5516-GL5516-NT00183-/261420488934?hash=item3cdde018e6)
+* [Light Sensor - 5516 GL5516 NT00183](http://www.ebay.ca/itm/20Pcs-Light-Sensitive-Inductor-Photo-Resistor-Photoresistor-5516-GL5516-NT00183-/261420488934?hash=item3cdde018e6)
