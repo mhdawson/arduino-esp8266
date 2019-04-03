@@ -1,0 +1,22 @@
+// wireless setup
+#ifndef __WIRELESS_H__
+#define __WIRELESS_H__
+const char *ssid =  "XXXXXXXXXXX";   // cannot be longer than 32 characters!
+const char *pass =  "XXXXXXXXX";   //
+const char* mqttServerString = "XX.XX.XX.XX";
+const uint16_t mqttServerPort = 8883;
+
+#define USE_CERTS
+unsigned char client_cert[] PROGMEM = {
+  0x30, 0x82, 0x03, 0x92, 0x30, 0x82, 0x02, 0x7a, 0x02, 0x09, 0x00, 0xcb,
+............
+};
+unsigned int client_cert_len = YYYY;
+
+
+unsigned char client_key[] PROGMEM = {
+  0x30, 0x82, 0x04, 0xa5, 0x02, 0x01, 0x00, 0x02, 0x82, 0x01, 0x01, 0x00,
+ .......
+};
+unsigned int client_key_len = ZZZZ;
+#endif
