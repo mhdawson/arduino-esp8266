@@ -132,11 +132,12 @@ void loop() {
 
     
   if (!client.connected()) {
-    if (client.connect(macAddress)) {
+    if (client.connect("d:al3kr9:TempAndLightSensor:device2", MQTT_USERNAME, MQTT_PASSWORD)) {
       Serial.println("mqtt connected:");
-      Serial.println(macAddress);
       Serial.println("\n");
       client.subscribe(LED_TOPIC);
+    } else {
+      Serial.println("Failed to connect to mqtt server\n");
     }
   }
 
@@ -150,13 +151,13 @@ void loop() {
     char floatBuffer[10];
     tempSensors.requestTemperatures();
     float currentTemp = tempSensors.getTempCByIndex(0);
-    snprintf(tempMessage, MAX_MESSAGE_SIZE, "0, 0 - temp: %s",
+    snprintf(tempMessage, MAX_MESSAGE_SIZE, "{ \"temp\": %s }",
              dtostrf(currentTemp, 4, 2, floatBuffer));
     client.publish(TEMP_TOPIC, tempMessage);
 
     char lightMessage[MAX_MESSAGE_SIZE];
     int lightValue = analogRead(LIGHT_PIN);
-    snprintf(lightMessage, MAX_MESSAGE_SIZE, "0, 0 - light: %d", lightValue);
+    snprintf(lightMessage, MAX_MESSAGE_SIZE, "{ \"light\": %d }", lightValue);
     client.publish(LIGHT_TOPIC, lightMessage);
 
     toggleLED();

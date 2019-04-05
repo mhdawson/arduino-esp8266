@@ -4,7 +4,7 @@
 
 #ifndef __SENSOR_CONFIG_H__
 #define __SENSOR_CONFIG_H__
-#define LIGHT_TOPIC "factory/1/light"
-#define TEMP_TOPIC  "factory/1/temp"
-#define LED_TOPIC   "factory/1/led"
+#define LIGHT_TOPIC "iot-2/evt/light/fmt/json"
+#define TEMP_TOPIC  "iot-2/evt/temp/fmt/json"
+#define LED_TOPIC "iot-2/cmd/led/fmt/txt"
 #endif
