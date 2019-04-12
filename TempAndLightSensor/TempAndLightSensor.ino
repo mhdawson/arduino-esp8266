@@ -13,7 +13,7 @@
 #include "WirelessConfig.h"
 #include "SensorConfig.h"
 
-#define TRANSMIT_INTERVAL_SECONDS 60
+#define TRANSMIT_INTERVAL_SECONDS 30
 #define MILLIS_IN_SECOND 1000
 #define LOOP_DELAY 100
 
