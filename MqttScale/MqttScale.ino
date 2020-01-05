@@ -56,6 +56,24 @@ char macAddress[] = "00:00:00:00:00:00";
 int SCALE_DOUT = D2;
 int SCALE_SCK = D3;
 int SCALE_READINGS = 20;
+int BUTTON_PIN = D5;
+int MIN_BUTTON_TIME_MICROS = 250000;
+
+ICACHE_RAM_ATTR void handleButton() {
+  static unsigned long lastInterruptTime = 0;
+
+  long timeMicros = micros();
+  if (digitalRead(BUTTON_PIN) == LOW) {
+    // get the duration of the button press and only accept as button
+    // press if it is long enough that we know it is not noise.
+    unsigned long duration = timeMicros - lastInterruptTime;
+    if (duration > MIN_BUTTON_TIME_MICROS) {
+      scale.tare();
+    }
+  }
+
+  lastInterruptTime = timeMicros;
+}
 
 void setup() {
   delay(1000);
@@ -70,6 +88,9 @@ void setup() {
   scale.begin(SCALE_DOUT, SCALE_SCK);
   scale.set_scale(SCALE_MULTIPLIER);
   scale.set_offset(0);
+
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(BUTTON_PIN),&handleButton,CHANGE);
 
 #ifdef USE_CERTS
   wclient.setCertificate_P(client_cert, client_cert_len);
