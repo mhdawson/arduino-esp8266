@@ -149,9 +149,9 @@ void loop() {
     char tempMessage[MAX_MESSAGE_SIZE];
     char floatBuffer[10];
     Serial.println(scale.get_units(SCALE_READINGS), 2);
-    float currentWeight = scale.get_units(SCALE_READINGS);
+    float currentWeight = round(scale.get_units(SCALE_READINGS));
     snprintf(tempMessage, MAX_MESSAGE_SIZE, "%s",
-             dtostrf(currentWeight, 4, 2, floatBuffer));
+             dtostrf(currentWeight, 4, 0, floatBuffer));
     client.publish(SCALE_TOPIC, tempMessage);
 
     counter = 0;
