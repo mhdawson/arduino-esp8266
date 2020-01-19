@@ -56,7 +56,7 @@ int SCALE_DOUT = D2;
 int SCALE_SCK = D3;
 int SCALE_READINGS = 20;
 int BUTTON_PIN = D5;
-int MIN_BUTTON_TIME_MICROS = 250000;
+unsigned int MIN_BUTTON_TIME_MICROS = 250000;
 
 ICACHE_RAM_ATTR void handleButton() {
   static unsigned long lastInterruptTime = 0;
@@ -104,7 +104,7 @@ void setup() {
   byte macRaw[6];
   WiFi.macAddress(macRaw);
   sprintf(macAddress,
-          "%02.2X:%02.2X:%02.2X:%02.2X:%02.2X:%02.2X",
+          "%2.2X:%2.2X:%2.2X:%2.2X:%2.2X:%2.2X",
           macRaw[0],
           macRaw[1],
           macRaw[2],
