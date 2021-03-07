@@ -12,6 +12,7 @@
 // device specifics
 #include "WirelessConfig.h"
 #include "SensorConfig.h"
+#include "ESP8266WebServer.h"
 
 #define TRANSMIT_INTERVAL_SECONDS 30
 #define MILLIS_IN_SECOND 1000
@@ -25,6 +26,7 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
 };
 
 ESP8266WiFiGenericClass wifi;
+ESP8266WebServer server(80);
 
 #ifdef USE_CERTS
 // if certs are used the following must be defined in WirelessConfig.h
@@ -48,6 +50,25 @@ PubSubClient client(mqttServerString, mqttServerPort, callback, wclient);
 
 int counter = 0;
 char macAddress[] = "00:00:00:00:00:00";
+
+
+char tempMessage[MAX_MESSAGE_SIZE];
+char floatBuffer[10];
+float currentTemp = 0;
+float currentHumidity = 0;
+int lightValue = 0;
+void provideMetrics() {
+  snprintf(tempMessage, MAX_MESSAGE_SIZE, "plant_humidity %s\n",
+             dtostrf(currentHumidity, 4, 2, floatBuffer));
+  String ptr = tempMessage;
+  snprintf(tempMessage, MAX_MESSAGE_SIZE, "plant_temperature %s\n",
+           dtostrf(currentTemp,4, 2, floatBuffer));
+  ptr+= tempMessage;
+  snprintf(tempMessage, MAX_MESSAGE_SIZE, "plant_light %d\n", lightValue);
+  ptr+= tempMessage;
+
+  server.send(200, "text/plain", ptr);
+}
 
 void setup() {
   delay(1000);
@@ -79,6 +100,9 @@ void setup() {
           macRaw[3],
           macRaw[4],
           macRaw[5]);
+
+  server.on("/metrics", provideMetrics);
+  server.begin();
 }
 
 void loop() {
@@ -114,26 +138,27 @@ void loop() {
 
     // don't send out temperature too often as we'll get 
     // incorrect values if we sample too often
-    char tempMessage[MAX_MESSAGE_SIZE];
-    char floatBuffer[10];
+
 
     // read temperature in Celsius
-    float currentTemp = SHT2x.GetTemperature();
+    currentTemp = SHT2x.GetTemperature();
     snprintf(tempMessage, MAX_MESSAGE_SIZE, "0, 0 - temp: %s",
              dtostrf(currentTemp, 4, 2, floatBuffer));
     client.publish(TEMP_TOPIC, tempMessage);
 
     // read humidity
-    float currentHumidity = SHT2x.GetHumidity();
+    currentHumidity = SHT2x.GetHumidity();
     snprintf(tempMessage, MAX_MESSAGE_SIZE, "0, 0 - hum: %s",
              dtostrf(currentHumidity, 4, 2, floatBuffer));
     client.publish(HUM_TOPIC, tempMessage);
 
     char lightMessage[MAX_MESSAGE_SIZE];
-    int lightValue = analogRead(LIGHT_PIN);
+    lightValue = analogRead(LIGHT_PIN);
     snprintf(lightMessage, MAX_MESSAGE_SIZE, "0, 0 - light: %d", lightValue);
     client.publish(LIGHT_TOPIC, lightMessage);
 
     counter = 0;
   }
+
+  server.handleClient();
 }
