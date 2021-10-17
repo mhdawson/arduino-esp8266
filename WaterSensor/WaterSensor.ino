@@ -23,10 +23,9 @@
 
 #define PUMP_OFF HIGH
 #define PUMP_ON LOW
-int PUMP_PINS[]   = { D5, D3, D4, D8 };
-int SENSOR_PINS[] = { D1, D0, D6, D7 };
-//unsigned int NUM_SENSORS = sizeof(SENSOR_PINS)/sizeof(SENSOR_PINS[0]); 
-unsigned int NUM_SENSORS = 1;
+int PUMP_PINS[]   = { D4, D0, D2, D3 };
+int SENSOR_PINS[] = { D7, D1, D5, D6 };
+unsigned int NUM_SENSORS = sizeof(SENSOR_PINS)/sizeof(SENSOR_PINS[0]);
 #define WATER_SENSOR_PIN SENSOR_PINS[0]
 
 void callback(char* topic, uint8_t* message, unsigned int length);
