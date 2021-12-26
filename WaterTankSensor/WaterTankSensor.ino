@@ -27,6 +27,7 @@ unsigned int NUM_SENSORS = sizeof(SENSOR_PINS)/sizeof(SENSOR_PINS[0]);
 void callback(char* topic, uint8_t* message, unsigned int length);
 
 ESP8266WiFiGenericClass wifi;
+ESP8266WebServer server(80);
 
 #ifdef USE_CERTS
 // if certs are used the following must be defined in WirelessConfig.h
@@ -51,6 +52,17 @@ PubSubClient client(mqttServerString, mqttServerPort, callback, wclient);
 int counter = 0;
 int fullIntervalCount = 0;
 char macAddress[] = "00:00:00:00:00:00";
+
+void provideMetrics() {
+  char tempMessage[MAX_MESSAGE_SIZE];
+  String ptr = "";
+  for (int i=0; i<NUM_SENSORS; i++) {
+      int sensorValue = digitalRead(SENSOR_PINS[i]);
+      snprintf(tempMessage, MAX_MESSAGE_SIZE, "Tank status%d %d\n", i, sensorValue);
+      ptr+= tempMessage;
+  }
+  server.send(200, "text/plain", ptr);
+}
 
 void setup() {
   delay(1000);
@@ -86,6 +98,9 @@ void setup() {
           macRaw[3],
           macRaw[4],
           macRaw[5]);
+
+  server.on("/metrics", provideMetrics);
+  server.begin();
 }
 
 void callback(char* topic, uint8_t* message, unsigned int length) {
@@ -137,4 +152,6 @@ void loop() {
     };
     counter = 0;
   }
+
+  server.handleClient();
 }
