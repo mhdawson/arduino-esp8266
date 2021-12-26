@@ -6,4 +6,5 @@
 #define __SENSOR_CONFIG_H__
 #define WATER_SENSOR_TOPIC "house/water"
 #define WATER_CONTROL_TOPIC "house/water/ctl"
+#define WATER_TANK_TOPIC "house/watertank/1"
 #endif

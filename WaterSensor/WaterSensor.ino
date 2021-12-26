@@ -100,11 +100,32 @@ void startFill() {
   }
 }
 
+void abortFill(char* message) {
+  currentFillSensor = NUM_SENSORS;
+  for (int i=0; i<NUM_SENSORS; i++) {
+    digitalWrite(PUMP_PINS[i], PUMP_OFF);
+  };
+  client.publish(WATER_SENSOR_TOPIC, message);
+  Serial.println(message);
+  Serial.println("\n");
+};
+
 void callback(char* topic, uint8_t* message, unsigned int length) {
+  if (strncmp((const char*)topic,"WATER_TANK_TOPIC", strlen("WATER_TANK_TOPIC")) == 0) {
+    if ((strncmp((const char*)message,"0", strlen("0")) == 0) && (currentFillSensor < NUM_SENSORS)) {
+      // if the tank is empty abort the fill
+      abortFill("water fill aborted due to empty tank");
+    }
+    return;
+  }
+
   if (strncmp((const char*)message,"on", strlen("on")) == 0) {
     startFill();
     client.publish(WATER_SENSOR_TOPIC, "water fill started");
     Serial.println("water fill started\n");
+  } else if (strncmp((const char*)message,"off", strlen("off")) == 0) {
+    // if we are filling, stop
+    abortFill("water fill aborted on request");
   }
 };
 
@@ -165,6 +186,7 @@ void loop() {
       Serial.println(macAddress);
       Serial.println("\n");
       client.subscribe(WATER_CONTROL_TOPIC);
+      client.subscribe(WATER_TANK_TOPIC);
     }
   }
   
