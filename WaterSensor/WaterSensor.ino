@@ -111,7 +111,7 @@ void abortFill(char* message) {
 };
 
 void callback(char* topic, uint8_t* message, unsigned int length) {
-  if (strncmp((const char*)topic,"WATER_TANK_TOPIC", strlen("WATER_TANK_TOPIC")) == 0) {
+  if (strncmp((const char*)topic,WATER_TANK_TOPIC, strlen(WATER_TANK_TOPIC)) == 0) {
     if ((strncmp((const char*)message,"0", strlen("0")) == 0) && (currentFillSensor < NUM_SENSORS)) {
       // if the tank is empty abort the fill
       abortFill("water fill aborted due to empty tank");
@@ -194,10 +194,16 @@ void loop() {
   if (counter == (TRANSMIT_INTERVAL_SECONDS * (MILLIS_IN_SECOND/LOOP_DELAY))) {
     Serial.println("Sending");
 
-    char tempMessage[MAX_MESSAGE_SIZE];
-    sprintf(tempMessage, "water state: %d\n", digitalRead(WATER_SENSOR_PIN));
-    client.publish(WATER_SENSOR_TOPIC, tempMessage);
-    Serial.println(tempMessage);
+    for (int i=0; i<NUM_SENSORS; i++) {
+      char tempMessage[MAX_MESSAGE_SIZE];
+      char tempTopic[MAX_MESSAGE_SIZE];
+      int sensorValue = digitalRead(WATER_SENSOR_PIN);
+      sprintf(tempTopic, "%s/%d", WATER_SENSOR_TOPIC, i);
+      sprintf(tempMessage, "%d", sensorValue);
+      client.publish(tempTopic, tempMessage);
+      sprintf(tempMessage, "water state[%d]: %d\n", i, sensorValue);
+      Serial.println(tempMessage);
+    };
 
     counter = 0;
   }
