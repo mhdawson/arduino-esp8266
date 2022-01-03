@@ -4,6 +4,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <Wire.h>
+#include <string>
 
 // device specifics
 #include "WirelessConfig.h"
@@ -35,6 +36,9 @@ void callback(char* topic, uint8_t* message, unsigned int length) {
 
 PubSubClient client(mqttServerString, mqttServerPort, callback, wclient);
 
+int count = 0;
+char macAddress[] = "00:00:00:00:00:00";
+
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
@@ -51,31 +55,40 @@ void setup() {
   if (WiFi.waitForConnectResult() == WL_CONNECTED) {
     Serial.println("WiFi connected");
   }
-}
 
-int count = 0;
+  // get the mac address to be used as a unique id for connecting to the mqtt server
+  byte macRaw[6];
+  WiFi.macAddress(macRaw);
+  sprintf(macAddress,
+          "%02.2X:%02.2X:%02.2X:%02.2X:%02.2X:%02.2X",
+          macRaw[0],
+          macRaw[1],
+          macRaw[2],
+          macRaw[3],
+          macRaw[4],
+          macRaw[5]);
+}
 
 void loop() {
   client.loop();
 
-  // make sure we are good for wifi
+   // make sure we are good for wifi
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Connecting to ");
     Serial.println(ssid);
     WiFi.reconnect();
-  
+
     if (WiFi.waitForConnectResult() != WL_CONNECTED) {
       Serial.println("Failed to reconnect WIFI");
       Serial.println(WiFi.waitForConnectResult());
-      delay(100);
+      delay(1000);
       return;
     }
-    Serial.println("WiFi connected");
   }
 
   if (!client.connected()) {
     Serial.println("PubSub not connected");
-    if (client.connect("mwiclient")) {
+    if (client.connect(macAddress)) {
       Serial.println("PubSub connected");
       client.subscribe(MESSAGE_WAITING_TOPIC);
     } else {
