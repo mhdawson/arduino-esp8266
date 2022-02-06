@@ -197,7 +197,7 @@ void loop() {
     for (int i=0; i<NUM_SENSORS; i++) {
       char tempMessage[MAX_MESSAGE_SIZE];
       char tempTopic[MAX_MESSAGE_SIZE];
-      int sensorValue = digitalRead(WATER_SENSOR_PIN);
+      int sensorValue = digitalRead(SENSOR_PINS[i]);
       sprintf(tempTopic, "%s/%d", WATER_SENSOR_TOPIC, i);
       sprintf(tempMessage, "%d", sensorValue);
       client.publish(tempTopic, tempMessage);
